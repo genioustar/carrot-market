@@ -50,7 +50,7 @@ export default function Enter() {
           <div className="mt-2">
             {method === "email" ? (
               <input
-                className="w-full appearance-none rounded-xl border border-gray-300 py-2 px-2 placeholder-gray-400 shadow-sm focus:border-yellow-500 focus:outline-none focus:ring-yellow-500"
+                className="w-full appearance-none rounded-md border border-gray-300 py-2 px-2 placeholder-gray-400 shadow-sm focus:border-yellow-500 focus:outline-none focus:ring-yellow-500"
                 type="email"
                 required
               />
@@ -68,7 +68,7 @@ export default function Enter() {
               </div>
             ) : null}
           </div>
-          <button className="mt-4 rounded-lg border border-transparent bg-yellow-300 px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
+          <button className="mt-4 rounded-md border border-transparent bg-yellow-300 px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
             {method === "email" ? "Get login link" : null}
             {method === "phone" ? "Get one-time password" : null}
           </button>
