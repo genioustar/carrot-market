@@ -12,3 +12,7 @@ npx tailwindcss init -p
 # tailwindcss 클래스 자동정렬 플러그인
 
 npm install -D prettier prettier-plugin-tailwindcss
+
+# tailwindcss form 스타일링 관련 플러그인
+
+npm install -D @tailwindcss/forms
