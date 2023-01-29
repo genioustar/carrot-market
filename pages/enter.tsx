@@ -12,11 +12,11 @@ export default function Enter() {
   return (
     <div className="mt-16 px-16">
       <h3 className="text-center text-3xl font-bold text-yellow-400">
-        Enter to Carrot
+        Enter to Mango
       </h3>
       <div className="mt-8">
         <div className="flex flex-col items-center">
-          <h5 className="text-sm font-medium text-gray-500">Enter using:</h5>
+          <h5 className="text-sm font-medium text-gray-500">Enter Using:</h5>
           <div className="mt-8 grid w-full grid-cols-2 gap-16 border-b">
             <button
               className={cls(
@@ -74,7 +74,7 @@ export default function Enter() {
           </button>
         </form>
         <div className="mt-8">
-          <div className="relative  ">
+          <div className="relative">
             <div className="absolute w-full border-t border-gray-300" />
             <div className="relative -top-3 text-center">
               <span className="bg-white px-2  text-sm text-gray-500">

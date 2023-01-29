@@ -16,3 +16,11 @@ npm install -D prettier prettier-plugin-tailwindcss
 # tailwindcss form 스타일링 관련 플러그인
 
 npm install -D @tailwindcss/forms
+
+# clone 받은뒤에 프로젝트 실행하려면
+
+npm install
+
+npm run build
+
+npm run dev 이렇게 해야 변경한거 바로 먹음!
