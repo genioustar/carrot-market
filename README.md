@@ -24,3 +24,6 @@ npm install
 npm run build
 
 npm run dev 이렇게 해야 변경한거 바로 먹음!
+
+#vscode tips
+멀티커서 다중입력을 할때 alt + 마우스 왼클릭!
