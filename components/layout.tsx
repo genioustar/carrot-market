@@ -52,7 +52,7 @@ export default function Layout({
       </div>
       <div className={cls("pt-12", hasTabBar ? "pb-32" : "")}>{children}</div>
       {hasTabBar ? (
-        <nav className="fixed bottom-0 flex w-full max-w-xl items-center justify-between border-t bg-white pb-10 pt-3 text-gray-800">
+        <nav className="fixed bottom-0 flex w-full max-w-xl items-center justify-between border-t bg-white px-10 pb-10 pt-3 text-gray-800">
           <Link href="/">
             <div className="flex flex-col items-center space-y-2">
               <svg
