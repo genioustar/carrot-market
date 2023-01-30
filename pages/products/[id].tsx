@@ -3,8 +3,8 @@ import type { NextPage } from "next";
 
 const ItemDetail: NextPage = () => {
   return (
-    <Layout canGoBack={true}>
-      <div className="px-5 py-10">
+    <Layout canGoBack title="Product Details">
+      <div className="px-4 py-4">
         <div className="mb-8">
           <div className="h-96 bg-slate-300" />
           <div className="mt-2 flex cursor-pointer items-center space-x-3 border-t border-b py-3">
