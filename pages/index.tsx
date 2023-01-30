@@ -1,5 +1,6 @@
 import Layout from "@/components/layout";
 import type { NextPage } from "next";
+import Link from "next/link";
 
 const Home: NextPage = () => {
   return (
@@ -55,23 +56,25 @@ const Home: NextPage = () => {
             </div>
           </div>
         ))}
-        <button className="fixed bottom-24 right-5 cursor-pointer rounded-full bg-yellow-300 p-3 text-gray-50 shadow-lg transition-colors hover:bg-yellow-400">
-          <svg
-            className="h-6 w-6"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-            />
-          </svg>
-        </button>
+        <Link href="/enter">
+          <button className="fixed bottom-24 right-5 cursor-pointer rounded-full bg-yellow-300 p-3 text-gray-50 shadow-lg transition-colors hover:bg-yellow-400">
+            <svg
+              className="h-6 w-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+          </button>
+        </Link>
       </div>
     </Layout>
   );
