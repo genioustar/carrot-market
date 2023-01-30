@@ -25,11 +25,11 @@ export default function Layout({
       <div
         className={cls(
           !canGoBack ? "justify-center" : "",
-          "fixed top-0 flex w-full max-w-xl items-center border-b bg-white px-10 py-4 text-lg font-medium text-gray-800"
+          "fixed top-0 flex h-12 w-full max-w-xl items-center border-b bg-white px-10 py-4 text-lg font-medium text-gray-800"
         )}
       >
         {canGoBack ? (
-          <button onClick={onClick}>
+          <button onClick={onClick} className="absolute left-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -46,9 +46,11 @@ export default function Layout({
             </svg>
           </button>
         ) : null}
-        {title ? <span className="font-bold">{title}</span> : null}
+        {title ? (
+          <span className={cls(canGoBack ? "mx-auto" : "", "")}>{title}</span>
+        ) : null}
       </div>
-      <div className={cls("pt-20", hasTabBar ? "pb-28" : "")}>{children}</div>
+      <div className={cls("pt-12", hasTabBar ? "pb-32" : "")}>{children}</div>
       {hasTabBar ? (
         <nav className="fixed bottom-0 flex w-full max-w-xl items-center justify-between border-t bg-white pb-10 pt-3 text-gray-800">
           <Link href="/">

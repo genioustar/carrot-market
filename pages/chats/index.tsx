@@ -4,7 +4,7 @@ import type { NextPage } from "next";
 const Chat: NextPage = () => {
   return (
     <Layout title="메세지" hasTabBar>
-      <div className="divide-y-[1px]">
+      <div className="divide-y">
         {[1, 1, 1, 1, 1, 1].map((_, i) => (
           <div
             key={i}

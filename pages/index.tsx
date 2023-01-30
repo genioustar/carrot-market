@@ -4,14 +4,11 @@ import type { NextPage } from "next";
 const Home: NextPage = () => {
   return (
     <Layout title="Home" hasTabBar>
-      <div className="flex flex-col space-y-5">
+      <div className="flex flex-col space-y-5 divide-y">
         {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
-          <div
-            key={i}
-            className="flex cursor-pointer justify-between border-b px-4 pb-4"
-          >
-            <div className="flex space-x-4 ">
-              <div className="h-20 w-20 rounded-xl bg-gray-500" />
+          <div key={i} className="flex cursor-pointer justify-between px-4">
+            <div className="flex items-center space-x-4">
+              <div className="mt-4 h-20 w-20 rounded-xl bg-gray-500" />
               <div className="flex flex-col pt-2">
                 <h3 className="text-sm font-extrabold text-gray-900">
                   New iPhone 14

@@ -4,8 +4,8 @@ import type { NextPage } from "next";
 const Profile: NextPage = () => {
   return (
     <Layout title="나의 망고" hasTabBar={true}>
-      <div className="py-10 px-4">
-        <div className="flex items-center space-x-3">
+      <div className="px-4">
+        <div className="flex items-center space-x-3 py-4">
           <div className="h-16 w-16 rounded-full bg-slate-500" />
           <div className="flex flex-col">
             <span className="font-medium text-gray-900">Steve Jebs</span>

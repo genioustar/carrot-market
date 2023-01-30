@@ -4,7 +4,7 @@ import type { NextPage } from "next";
 const Live: NextPage = () => {
   return (
     <Layout title="라이브" hasTabBar={true}>
-      <div className="space-y-4 divide-y-2 py-10">
+      <div className="space-y-4 divide-y-2">
         {[1, 1, 1, 1, 1, 1].map((_, i) => (
           <div className="px-4 pt-4" key={i}>
             <div className="aspect-video w-full rounded-md bg-slate-300 shadow-sm" />
