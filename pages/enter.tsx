@@ -1,9 +1,5 @@
+import { cls } from "@/libs/utils";
 import { useState } from "react";
-
-function cls(...classnames: string[]) {
-  // ["a", "b", "c"].join(" ") == "a b c";
-  return classnames.join(" ");
-}
 
 export default function Enter() {
   const [method, setMethod] = useState<"email" | "phone">("email"); // ts를 사용하여 email, phone의 값만 받게 하기 위해서 <S> <- type넣는 부분에 "email | "phone" 이거 넣우준거임!
