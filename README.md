@@ -35,6 +35,14 @@ npm i prisma -D
 npx prisma init
 생성된 .env파일과 prisma/schema.prisma 수정
 
+# prisma studio 설치
+
+npx prisma studio
+
+# prisma client 설치(-D가 없는데 백엔드에서 실제로 이걸 사용할꺼라서 개발모드가 사라진거!)
+
+npm install @prisma/client
+
 # prisma eslint적용
 
 settings.json 젤 밑에
