@@ -50,3 +50,7 @@ settings.json 젤 밑에
 "editor.defaultFormatter": "Prisma.prisma"
 }
 추가!
+
+# react-hook-form 설치
+
+npm i react-hook-form
