@@ -1,149 +1,47 @@
 import Layout from "@/components/layout";
+import Message from "@/components/message";
 import type { NextPage } from "next";
 
 const ChatDetail: NextPage = () => {
   return (
     <Layout title="Steve" canGoBack>
       <div className="mt-2 space-y-2 px-4 pb-16">
-        <div className="flex items-start space-x-2">
-          <div className="h-8 w-8 rounded-full bg-slate-200" />
-          <p className="border-md w-1/2 break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-            Hi how much are you selling
-          </p>
-        </div>
-        <div className="flex flex-row-reverse items-start space-x-2 space-x-reverse">
-          <div className="h-8 w-8 rounded-full bg-slate-300" />
-
-          <p className="border-md w-1/2 break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-            I want ￦20,000
-          </p>
-        </div>
-        <div className="flex items-start space-x-2">
-          <div className="h-8 w-8 rounded-full bg-slate-200" />
-          <div>
-            <p className="border-md break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-              미쳤어
-            </p>
-          </div>
-        </div>
-        <div className="flex items-start space-x-2">
-          <div className="h-8 w-8 rounded-full bg-slate-200" />
-          <p className="border-md w-1/2 break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-            Hi how much are you selling
-          </p>
-        </div>
-        <div className="flex flex-row-reverse items-start space-x-2 space-x-reverse">
-          <div className="h-8 w-8 rounded-full bg-slate-300" />
-
-          <p className="border-md w-1/2 break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-            I want ￦20,000
-          </p>
-        </div>
-        <div className="flex items-start space-x-2">
-          <div className="h-8 w-8 rounded-full bg-slate-200" />
-          <div>
-            <p className="border-md break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-              미쳤어
-            </p>
-          </div>
-        </div>
-        <div className="flex items-start space-x-2">
-          <div className="h-8 w-8 rounded-full bg-slate-200" />
-          <p className="border-md w-1/2 break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-            Hi how much are you selling
-          </p>
-        </div>
-        <div className="flex flex-row-reverse items-start space-x-2 space-x-reverse">
-          <div className="h-8 w-8 rounded-full bg-slate-300" />
-
-          <p className="border-md w-1/2 break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-            I want ￦20,000
-          </p>
-        </div>
-        <div className="flex items-start space-x-2">
-          <div className="h-8 w-8 rounded-full bg-slate-200" />
-          <div>
-            <p className="border-md break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-              미쳤어
-            </p>
-          </div>
-        </div>
-        <div className="flex items-start space-x-2">
-          <div className="h-8 w-8 rounded-full bg-slate-200" />
-          <p className="border-md w-1/2 break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-            Hi how much are you selling
-          </p>
-        </div>
-        <div className="flex flex-row-reverse items-start space-x-2 space-x-reverse">
-          <div className="h-8 w-8 rounded-full bg-slate-300" />
-
-          <p className="border-md w-1/2 break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-            I want ￦20,000
-          </p>
-        </div>
-        <div className="flex items-start space-x-2">
-          <div className="h-8 w-8 rounded-full bg-slate-200" />
-          <div>
-            <p className="border-md break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-              미쳤어
-            </p>
-          </div>
-        </div>
-        <div className="flex items-start space-x-2">
-          <div className="h-8 w-8 rounded-full bg-slate-200" />
-          <p className="border-md w-1/2 break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-            Hi how much are you selling
-          </p>
-        </div>
-        <div className="flex flex-row-reverse items-start space-x-2 space-x-reverse">
-          <div className="h-8 w-8 rounded-full bg-slate-300" />
-
-          <p className="border-md w-1/2 break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-            I want ￦20,000
-          </p>
-        </div>
-        <div className="flex items-start space-x-2">
-          <div className="h-8 w-8 rounded-full bg-slate-200" />
-          <div>
-            <p className="border-md break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-              미쳤어
-            </p>
-          </div>
-        </div>
-        <div className="flex items-start space-x-2">
-          <div className="h-8 w-8 rounded-full bg-slate-200" />
-          <p className="border-md w-1/2 break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-            Hi how much are you selling
-          </p>
-        </div>
-        <div className="flex flex-row-reverse items-start space-x-2 space-x-reverse">
-          <div className="h-8 w-8 rounded-full bg-slate-300" />
-
-          <p className="border-md w-1/2 break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-            I want ￦20,000
-          </p>
-        </div>
-        <div className="flex items-start space-x-2">
-          <div className="h-8 w-8 rounded-full bg-slate-200" />
-          <div>
-            <p className="border-md break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-              미쳤어
-            </p>
-          </div>
-        </div>
-        <div className="flex items-start space-x-2">
-          <div className="h-8 w-8 rounded-full bg-slate-200" />
-          <p className="border-md w-1/2 break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-            Hi how much are you selling
-          </p>
-        </div>
-        <div className="flex flex-row-reverse items-start space-x-2 space-x-reverse">
-          <div className="h-8 w-8 rounded-full bg-slate-300" />
-
-          <p className="border-md w-1/2 break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
-            I want ￦20,000
-          </p>
-        </div>
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
+        <Message message="Hi how much are you selling" />
+        <Message reversed={true} message="I want ￦20,000" />
 
         <div className="fixed inset-x-0 bottom-2 mx-auto w-full max-w-md">
           <div className="relative flex items-center">

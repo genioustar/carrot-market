@@ -1,3 +1,5 @@
+import Button from "@/components/button";
+import Input from "@/components/input";
 import Layout from "@/components/layout";
 import type { NextPage } from "next";
 
@@ -21,35 +23,18 @@ const EditProfile: NextPage = () => {
           </label>
         </div>
         <div className="space-y-1">
-          <label htmlFor="email" className="text-sm font-medium text-gray-700">
-            Email Address
-          </label>
-          <input
-            id="email"
-            className="w-full appearance-none rounded-md border border-gray-300 py-2 px-2 text-gray-700 placeholder-gray-400 shadow-sm focus:border-yellow-500 focus:outline-none focus:ring-yellow-500"
-            type="email"
+          <Input label="Email Addres" id="email" required type="email" />
+        </div>
+        <div className="space-y-1">
+          <Input
+            label="Phone Number"
+            id="phone"
+            kind="phone"
+            type="phone"
             required
           />
         </div>
-        <div className="space-y-1">
-          <label htmlFor="phone" className="text-sm font-medium text-gray-700">
-            Phone Number
-          </label>
-          <div className="flex rounded-md shadow-sm">
-            <span className="flex select-none items-center justify-between rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500 ">
-              +82
-            </span>
-            <input
-              id="input"
-              type="number"
-              className="w-full appearance-none rounded-xl rounded-l-none border border-gray-300 py-2 px-2 placeholder-gray-400 shadow-sm focus:border-yellow-500 focus:outline-none focus:ring-yellow-500"
-              required
-            />
-          </div>
-        </div>
-        <button className="mt-4 w-full rounded-md border border-transparent bg-yellow-300 px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
-          Update Profile
-        </button>
+        <Button text="Update Profile" />
       </div>
     </Layout>
   );

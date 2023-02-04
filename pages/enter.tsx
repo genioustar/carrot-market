@@ -1,3 +1,5 @@
+import Button from "@/components/button";
+import Input from "@/components/input";
 import { cls } from "@/libs/utils";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -46,37 +48,31 @@ export default function Enter() {
           </div>
         </div>
         <form className="mt-4 flex flex-col">
-          <label htmlFor="input" className="text-sm font-medium text-gray-700">
-            {method === "email" ? "Email address" : null}
-            {method === "phone" ? "Phone number" : null}
-          </label>
           <div className="mt-2">
             {method === "email" ? (
-              <input
-                id="input"
-                className="w-full appearance-none rounded-md border border-gray-300 py-2 px-2 placeholder-gray-400 shadow-sm focus:border-yellow-500 focus:outline-none focus:ring-yellow-500"
+              <Input
+                id="text"
+                label="Email Address"
                 type="email"
                 required
+                kind="text"
               />
             ) : null}
             {method === "phone" ? (
-              <div className="flex rounded-md shadow-sm">
-                <span className="flex select-none items-center justify-between rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500 ">
-                  +82
-                </span>
-                <input
-                  id="input"
-                  type="number"
-                  className="w-full appearance-none rounded-xl rounded-l-none border border-gray-300 py-2 px-2 placeholder-gray-400 shadow-sm focus:border-yellow-500 focus:outline-none focus:ring-yellow-500"
-                  required
-                />
-              </div>
+              <Input
+                id="phone"
+                label="Phone Number"
+                type="phone"
+                requried
+                kind="phone"
+              />
             ) : null}
           </div>
-          <button className="mt-4 rounded-md border border-transparent bg-yellow-300 px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
-            {method === "email" ? "Get login link" : null}
-            {method === "phone" ? "Get one-time password" : null}
-          </button>
+
+          {method === "email" ? <Button text="Get login link"> </Button> : null}
+          {method === "phone" ? (
+            <Button text="Get one-time password"></Button>
+          ) : null}
         </form>
         <div className="mt-8">
           <div className="relative">
