@@ -9,6 +9,7 @@ export default function Input({
   label,
   id,
   kind = "text",
+  register,
   ...rest
 }: InputProps) {
   return (
@@ -21,6 +22,7 @@ export default function Input({
           <input
             id={id}
             className="w-full appearance-none rounded-md border border-gray-300 py-2 px-2 placeholder-gray-400 shadow-sm focus:border-yellow-500 focus:outline-none focus:ring-yellow-500"
+            {...register}
             {...rest}
           />
         </div>
@@ -33,6 +35,7 @@ export default function Input({
           <input
             id={id}
             className="w-full appearance-none rounded-xl rounded-l-none border border-gray-300 py-2 px-2 placeholder-gray-400 shadow-sm focus:border-yellow-500 focus:outline-none focus:ring-yellow-500"
+            {...register}
             {...rest}
           />
         </div>

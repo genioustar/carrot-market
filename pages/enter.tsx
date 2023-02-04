@@ -1,6 +1,7 @@
 import Button from "@/components/button";
 import Input from "@/components/input";
-import { cls } from "@/libs/utils";
+import useMutation from "@/libs/client/useMutation";
+import { cls } from "@/libs/client/utils";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -10,10 +11,22 @@ interface EnterForm {
 }
 
 export default function Enter() {
-  const { register } = useForm<EnterForm>();
+  const [enter, { loading, data, error }] = useMutation("/api/users/enter"); // api POST를 호출하는 훅으로 enter라는 function과 object를 리턴하는 hook을 만듬!
+  const [submmitting, setSubmmitting] = useState(false); // backend에서 작업중임을 표시하기 위한 변수
+  const { register, watch, handleSubmit, reset } = useForm<EnterForm>();
   const [method, setMethod] = useState<"email" | "phone">("email"); // ts를 사용하여 email, phone의 값만 받게 하기 위해서 <S> <- type넣는 부분에 "email | "phone" 이거 넣우준거임!
-  const onEmailClick = () => setMethod("email");
-  const onPhoneClick = () => setMethod("phone");
+  const onEmailClick = () => {
+    reset(); // reset이 들어가는 이유는 아래에서 탭을 바꿔 누르면 입력받은 값이 안지워지고 그대로 유지되기 때문!
+    setMethod("email");
+  };
+  const onPhoneClick = () => {
+    reset(); // reset이 들어가는 이유는 아래에서 탭을 바꿔 누르면 입력받은 값이 안지워지고 그대로 유지되기 때문!
+    setMethod("phone");
+  };
+  const onValid = (validForm: EnterForm) => {
+    enter(validForm); //이 vaildForm 데이터는 input에서 들어온 {email:123@gmail.com} or {phone:01012345678}임!
+  };
+  console.log(loading, data, error);
   return (
     <div className="mt-16 px-16">
       <h3 className="text-center text-3xl font-bold text-yellow-400">
@@ -47,10 +60,11 @@ export default function Enter() {
             </button>
           </div>
         </div>
-        <form className="mt-4 flex flex-col">
+        <form onSubmit={handleSubmit(onValid)} className="mt-4 flex flex-col">
           <div className="mt-2">
             {method === "email" ? (
               <Input
+                register={register("email", { required: true })}
                 id="text"
                 label="Email Address"
                 type="email"
@@ -60,18 +74,21 @@ export default function Enter() {
             ) : null}
             {method === "phone" ? (
               <Input
+                register={register("phone", { required: true })}
                 id="phone"
                 label="Phone Number"
                 type="phone"
-                requried
+                required
                 kind="phone"
               />
             ) : null}
           </div>
 
-          {method === "email" ? <Button text="Get login link"> </Button> : null}
+          {method === "email" ? (
+            <Button text={submmitting ? "Loading" : "Get login link"}> </Button>
+          ) : null}
           {method === "phone" ? (
-            <Button text="Get one-time password"></Button>
+            <Button text={submmitting ? "Loading" : "Get one-time password"} />
           ) : null}
         </form>
         <div className="mt-8">
