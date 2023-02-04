@@ -1,7 +1,14 @@
 import { cls } from "@/libs/utils";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+interface EnterForm {
+  email?: string;
+  phone?: string;
+}
 
 export default function Enter() {
+  const { register } = useForm<EnterForm>();
   const [method, setMethod] = useState<"email" | "phone">("email"); // ts를 사용하여 email, phone의 값만 받게 하기 위해서 <S> <- type넣는 부분에 "email | "phone" 이거 넣우준거임!
   const onEmailClick = () => setMethod("email");
   const onPhoneClick = () => setMethod("phone");
