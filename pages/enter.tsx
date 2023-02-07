@@ -9,11 +9,17 @@ interface EnterForm {
   email?: string;
   phone?: string;
 }
-
+/**
+ *
+ * @returns handleSubmit은 유효성 검증이 통과된 데이터를 받는데 받으면 onValid함수를 호출한다.
+ * onValid함수에서는 useMutation함수의 enter함수인 오브젝트를 뜻하고 이 enter는 useMutation의
+ * return 값인 mutation함수를 뜻한다. --> return [mutation, states];
+ * useMutation에서 받은 데이터는 post로 데이터를 받아온 것임으로 {loading, data, error} 에 데이터를 세팅함.
+ */
 export default function Enter() {
   const [enter, { loading, data, error }] = useMutation("/api/users/enter"); // api POST를 호출하는 훅으로 enter라는 function과 object를 리턴하는 hook을 만듬!
   const [submmitting, setSubmmitting] = useState(false); // backend에서 작업중임을 표시하기 위한 변수
-  const { register, watch, handleSubmit, reset } = useForm<EnterForm>();
+  const { register, watch, handleSubmit, reset } = useForm<EnterForm>(); //useForm에서 활용하는 타입은 EnterForm 타입
   const [method, setMethod] = useState<"email" | "phone">("email"); // ts를 사용하여 email, phone의 값만 받게 하기 위해서 <S> <- type넣는 부분에 "email | "phone" 이거 넣우준거임!
   const onEmailClick = () => {
     reset(); // reset이 들어가는 이유는 아래에서 탭을 바꿔 누르면 입력받은 값이 안지워지고 그대로 유지되기 때문!

@@ -19,7 +19,7 @@ export default function Message({
       )}
     >
       <div className="h-8 w-8 rounded-full bg-slate-200" />
-      <p className="border-md w-1/2 break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
+      <p className="w-1/2 break-words rounded-md border border-gray-300 p-2 text-sm text-gray-700">
         {message}
       </p>
     </div>
