@@ -60,3 +60,11 @@ settings.json 젤 밑에
 # react-hook-form 설치
 
 npm i react-hook-form
+
+# TILIO 설치
+
+npm i twilio
+
+# SENDGRID 설치
+
+npm install --save @sendgrid/mail

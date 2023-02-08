@@ -6,7 +6,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface MutationResult {
-  //server에서 주는 data (withHandler.ts) 오브젝트에 ok라는 값이 있는데 이값을 boolean으로 특정한다.
+  /*server에서 주는 data (api/users/confirm or enter.ts) res.status를 줄때 ok라는 값을 주는데 이값을 boolean으로 특정해서
+   * 왜 res.status ok로 결과를 주냐면 POST에 대한거만 처리하니까! DB 상태를 변경하고 잘됐으면 ok: true, 안됐으면 ok: false로 주는거임
+   */
   ok: boolean;
 }
 
@@ -24,14 +26,14 @@ interface EnterForm {
  *
  * @returns handleSubmit은 유효성 검증이 통과된 데이터를 받는데 받으면 onValid함수를 호출한다.
  * onValid함수에서는 useMutation함수의 enter함수인 오브젝트를 뜻하고 이 enter는 useMutation의
- * return 값인 mutation함수를 뜻한다. --> return [mutation, states];
+ * return 값인 mutation함수를 뜻한다. --> return [mutation, states]; mutation은 api를 통해서 데이터를 가져온다.
  * useMutation에서 받은 데이터는 post로 데이터를 받아온 것임으로 {loading, data, error} 에 데이터를 세팅함.
  */
 export default function Enter() {
   const [enter, { loading, data, error }] =
     useMutation<MutationResult>("/api/users/enter"); // api POST를 호출하는 훅으로 enter라는 function과 object를 리턴하는 hook을 만듬!
   const { register, watch, handleSubmit, reset } = useForm<EnterForm>(); //useForm에서 활용하는 타입은 EnterForm 타입
-  const [confirmToken, { loading: tokenLoading, data: tokenData }] =
+  const [confirmToken, { loading: tokenLoading, data: tokenData }] = // api POST로 호출하는 것으로 Token 테이블의 토큰값을 가져오는 훅
     useMutation<MutationResult>("/api/users/confirm");
   const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
     useForm<TokenForm>(); // useForm에서 쓰고 있는 네이밍을 다른 네이밍으로 쓰고 싶을때 사용.
@@ -59,7 +61,7 @@ export default function Enter() {
         Enter to Mango
       </h3>
       <div className="mt-8">
-        {data?.ok ? (
+        {data?.ok ? ( //data는 login의 결과로 가져오는 것으로 data가 있으면 token인증 UI를 없으면 email or phone번호 넣는 UI를 보여준다.
           <form
             onSubmit={tokenHandleSubmit(onTokenValid)}
             className="mt-4 flex flex-col"
@@ -77,7 +79,7 @@ export default function Enter() {
               />
             </div>
             <Button text={tokenLoading ? "Loading" : "Comfirm Token"}> </Button>
-          </form> // 여기서 data에 ? 붙은 이유는 data가 undefind일 수 있어서! 이data 때문에 useMutation.tsx에 제너럴이 들어간다
+          </form> // 여기서 data에 ? 붙은 이유는 data가 undefind일 수 있어서! 이 data 때문에 useMutation.tsx에 제너럴을 통해서 리팩토링을 시작했다!
         ) : (
           <>
             <div className="flex flex-col items-center">
