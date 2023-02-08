@@ -11,10 +11,12 @@ interface MutationResult {
 }
 
 interface TokenForm {
+  //email or phone 으로 인증번호 받고 Comfirm 하기 위한 화면의 input 값들
   token: string;
 }
 
 interface EnterForm {
+  // email or phone으로 들어오는 input 값의 형태들
   email?: string;
   phone?: string;
 }
