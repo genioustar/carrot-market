@@ -35,6 +35,12 @@ npm i prisma -D
 npx prisma init
 생성된 .env파일과 prisma/schema.prisma 수정
 
+# schema.prisma 변경시
+
+프로젝트 폴더로가서 (ex.C:\Users\NY\ReactStudy\carrot-market)
+npx prisma db push
+해줘야 prisma에 추가됨!
+
 # prisma studio 설치
 
 npx prisma studio
