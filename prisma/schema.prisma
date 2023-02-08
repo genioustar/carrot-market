@@ -13,7 +13,7 @@ datasource db {
 
 model User {
   id       Int      @id @default(autoincrement())
-  phone    Int?     @unique
+  phone    BigInt?  @unique
   email    String?  @unique
   name     String
   avatar   String?
@@ -24,8 +24,8 @@ model User {
 
 model Token {
   id        Int      @id @default(autoincrement())
-  payload   String   @unique //token을 뜻함
-  user      User     @relation(fields: [userId], references: [id]) //userId는 ref id에서 User table에 있는 id 값이란걸 알 수 있음. 이를 통해서 token.user.name ==="Anonymous" 이게 됨!
+  payload   String   @unique //token을 뜻함 아래의 onDelete: Cascade는 User가 지워질때 자식인 Token도 지워진다는 의미! onDelete: SetNull은 User가 지워지면 user값을 null로 한다는 뜻!
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade) //userId는 ref id에서 User table에 있는 id 값이란걸 알 수 있음. 이를 통해서 token.user.name ==="Anonymous" 이게 됨!
   userId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

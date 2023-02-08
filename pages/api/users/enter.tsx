@@ -1,6 +1,11 @@
 import client from "@/libs/server/client";
 import withHandler, { ResponseType } from "@/libs/server/withHandler";
+import mail from "@sendgrid/mail";
 import { NextApiRequest, NextApiResponse } from "next";
+import twilio from "twilio";
+
+const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+mail.setApiKey(process.env.SENDGRID_KEY!);
 
 // method 검증이 끝나고 들어온 부분!
 async function handler(
@@ -11,6 +16,23 @@ async function handler(
   const user = phone ? { phone: +phone } : email ? { email } : null; // 화면에서 입력값이 phone or email이라서 그 중 하나를 선택하고!
   if (!user) return res.status(400).json({ ok: false }); //
   const payload = Math.floor(100000 + Math.random() * 900000) + "";
+  // if (phone) {
+  //   const message = await twilioClient.messages.create({
+  //     messagingServiceSid: process.env.TWILIO_MSID,
+  //     to: process.env.MY_PHONE!, // ! 가 붙는 이유는! .env에 MY_PHONE가 없을 수도 있기 때문에!
+  //     body: `Your login token is ${payload}.`,
+  //   });
+  //   console.log(message);
+  // } else if (email) {
+  //   const email = await mail.send({
+  //     from: "ropa_ropa@naver.com",
+  //     to: "ropa_ropa@naver.com",
+  //     subject: "Your Carrot Market Verification Email",
+  //     text: `Your Payload is ${payload}`,
+  //   });
+  //   console.log(email);
+  // }
+
   // token table은 payload와 user가 필수 값임.
   const token = await client.token.create({
     data: {

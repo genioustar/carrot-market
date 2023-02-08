@@ -5,6 +5,15 @@ import { cls } from "@/libs/client/utils";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
+interface MutationResult {
+  //server에서 주는 data (withHandler.ts) 오브젝트에 ok라는 값이 있는데 이값을 boolean으로 특정한다.
+  ok: boolean;
+}
+
+interface TokenForm {
+  token: string;
+}
+
 interface EnterForm {
   email?: string;
   phone?: string;
@@ -17,9 +26,13 @@ interface EnterForm {
  * useMutation에서 받은 데이터는 post로 데이터를 받아온 것임으로 {loading, data, error} 에 데이터를 세팅함.
  */
 export default function Enter() {
-  const [enter, { loading, data, error }] = useMutation("/api/users/enter"); // api POST를 호출하는 훅으로 enter라는 function과 object를 리턴하는 hook을 만듬!
-  const [submmitting, setSubmmitting] = useState(false); // backend에서 작업중임을 표시하기 위한 변수
+  const [enter, { loading, data, error }] =
+    useMutation<MutationResult>("/api/users/enter"); // api POST를 호출하는 훅으로 enter라는 function과 object를 리턴하는 hook을 만듬!
   const { register, watch, handleSubmit, reset } = useForm<EnterForm>(); //useForm에서 활용하는 타입은 EnterForm 타입
+  const [confirmToken, { loading: tokenLoading, data: tokenData }] =
+    useMutation<MutationResult>("/api/users/confirm");
+  const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
+    useForm<TokenForm>(); // useForm에서 쓰고 있는 네이밍을 다른 네이밍으로 쓰고 싶을때 사용.
   const [method, setMethod] = useState<"email" | "phone">("email"); // ts를 사용하여 email, phone의 값만 받게 하기 위해서 <S> <- type넣는 부분에 "email | "phone" 이거 넣우준거임!
   const onEmailClick = () => {
     reset(); // reset이 들어가는 이유는 아래에서 탭을 바꿔 누르면 입력받은 값이 안지워지고 그대로 유지되기 때문!
@@ -32,6 +45,11 @@ export default function Enter() {
   const onValid = (validForm: EnterForm) => {
     enter(validForm); //이 vaildForm 데이터는 input에서 들어온 {email:123@gmail.com} or {phone:01012345678}임!
   };
+  const onTokenValid = (validForm: TokenForm) => {
+    if (tokenLoading) return;
+    confirmToken(validForm);
+  };
+
   console.log(loading, data, error);
   return (
     <div className="mt-16 px-16">
@@ -39,64 +57,93 @@ export default function Enter() {
         Enter to Mango
       </h3>
       <div className="mt-8">
-        <div className="flex flex-col items-center">
-          <h5 className="text-sm font-medium text-gray-500">Enter Using:</h5>
-          <div className="mt-8 grid w-full grid-cols-2 gap-16 border-b">
-            <button
-              className={cls(
-                "border-b-2 pb-4 font-medium",
-                method === "email"
-                  ? " border-yellow-500 text-yellow-400"
-                  : "border-transparent text-gray-500"
-              )}
-              onClick={onEmailClick}
-            >
-              Email
-            </button>
-            <button
-              className={cls(
-                "border-b-2 pb-4 font-medium",
-                method === "phone"
-                  ? " border-yellow-500 text-yellow-400"
-                  : "border-transparent text-gray-500"
-              )}
-              onClick={onPhoneClick}
-            >
-              Phone
-            </button>
-          </div>
-        </div>
-        <form onSubmit={handleSubmit(onValid)} className="mt-4 flex flex-col">
-          <div className="mt-2">
-            {method === "email" ? (
+        {data?.ok ? (
+          <form
+            onSubmit={tokenHandleSubmit(onTokenValid)}
+            className="mt-4 flex flex-col"
+          >
+            <div className="mt-2">
               <Input
-                register={register("email", { required: true })}
-                id="text"
-                label="Email Address"
-                type="email"
+                register={tokenRegister("token", {
+                  required: true,
+                })}
+                id="token"
+                label="Confirmation Token"
+                type="number"
                 required
                 kind="text"
               />
-            ) : null}
-            {method === "phone" ? (
-              <Input
-                register={register("phone", { required: true })}
-                id="phone"
-                label="Phone Number"
-                type="phone"
-                required
-                kind="phone"
-              />
-            ) : null}
-          </div>
+            </div>
+            <Button text={tokenLoading ? "Loading" : "Comfirm Token"}> </Button>
+          </form> // 여기서 data에 ? 붙은 이유는 data가 undefind일 수 있어서! 이data 때문에 useMutation.tsx에 제너럴이 들어간다
+        ) : (
+          <>
+            <div className="flex flex-col items-center">
+              <h5 className="text-sm font-medium text-gray-500">
+                Enter Using:
+              </h5>
+              <div className="mt-8 grid w-full grid-cols-2 gap-16 border-b">
+                <button
+                  className={cls(
+                    "border-b-2 pb-4 font-medium",
+                    method === "email"
+                      ? " border-yellow-500 text-yellow-400"
+                      : "border-transparent text-gray-500"
+                  )}
+                  onClick={onEmailClick}
+                >
+                  Email
+                </button>
+                <button
+                  className={cls(
+                    "border-b-2 pb-4 font-medium",
+                    method === "phone"
+                      ? " border-yellow-500 text-yellow-400"
+                      : "border-transparent text-gray-500"
+                  )}
+                  onClick={onPhoneClick}
+                >
+                  Phone
+                </button>
+              </div>
+            </div>
+            <form
+              onSubmit={handleSubmit(onValid)}
+              className="mt-4 flex flex-col"
+            >
+              <div className="mt-2">
+                {method === "email" ? (
+                  <Input
+                    register={register("email", { required: true })}
+                    id="text"
+                    label="Email Address"
+                    type="email"
+                    required
+                    kind="text"
+                  />
+                ) : null}
+                {method === "phone" ? (
+                  <Input
+                    register={register("phone", { required: true })}
+                    id="phone"
+                    label="Phone Number"
+                    type="phone"
+                    required
+                    kind="phone"
+                  />
+                ) : null}
+              </div>
 
-          {method === "email" ? (
-            <Button text={submmitting ? "Loading" : "Get login link"}> </Button>
-          ) : null}
-          {method === "phone" ? (
-            <Button text={submmitting ? "Loading" : "Get one-time password"} />
-          ) : null}
-        </form>
+              {method === "email" ? (
+                <Button text={loading ? "Loading" : "Get login link"}> </Button>
+              ) : null}
+              {method === "phone" ? (
+                <Button text={loading ? "Loading" : "Get one-time password"} />
+              ) : null}
+            </form>
+          </>
+        )}
+
         <div className="mt-8">
           <div className="relative">
             <div className="absolute w-full border-t border-gray-300" />
