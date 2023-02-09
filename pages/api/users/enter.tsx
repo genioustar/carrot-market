@@ -13,7 +13,7 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   const { phone, email } = req.body;
-  const user = phone ? { phone: +phone } : email ? { email } : null; // 화면에서 입력값이 phone or email이라서 그 중 하나를 선택하고!
+  const user = phone ? { phone } : email ? { email } : null; // 화면에서 입력값이 phone or email이라서 그 중 하나를 선택하고!
   if (!user) return res.status(400).json({ ok: false }); //
   const payload = Math.floor(100000 + Math.random() * 900000) + "";
   // if (phone) {
@@ -51,7 +51,7 @@ async function handler(
       },
     },
   });
-
+  console.log(user);
   return res.json({
     ok: true,
   });

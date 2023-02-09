@@ -2,7 +2,8 @@ import Button from "@/components/button";
 import Input from "@/components/input";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface MutationResult {
@@ -53,8 +54,13 @@ export default function Enter() {
     if (tokenLoading) return;
     confirmToken(validForm);
   };
-
-  console.log(loading, data, error);
+  const router = useRouter();
+  useEffect(() => {
+    if (tokenData?.ok) {
+      //token값을 검증하고 검증결과가 true로 나오면 기본 페이지로 이동하는부분!
+      router.push("/");
+    }
+  }, [tokenData, router]); // tokenData의 state 가 변경되었을때만 호출됨! 여기서 왜 router도 들어있나? 싶은데 이건 useEffect에 router도 같이 사용하고 있기 때문에!
   return (
     <div className="mt-16 px-16">
       <h3 className="text-center text-3xl font-bold text-yellow-400">
