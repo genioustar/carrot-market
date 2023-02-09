@@ -7,7 +7,7 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  console.log(req.session); // 이렇게 req 에 session이 있는건 아래 withIronSessionApiRoute를 썻기 때문!
+  // console.log(req.session); // 이렇게 req 에 session이 있는건 아래 withIronSessionApiRoute를 썻기 때문!
   const { token } = req.body;
   const foundToken = await client.token.findUnique({
     where: {
@@ -16,7 +16,7 @@ async function handler(
     // include: { user: true }, // 이 include를 사용하려면 schema.prisma에서 @relation 이설정을 해준거만 쓸수 있음!
   });
   console.log("token value : ", foundToken);
-  if (!foundToken) return res.status(404).end();
+  if (!foundToken) return res.status(404).end(); //!가 들어가는건 값이 무조건 할당되어 있다고 컴파일러에게 말하는 것!
   req.session.user = {
     id: foundToken.userId,
   };
