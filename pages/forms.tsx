@@ -10,16 +10,19 @@ export default function Forms() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitSuccessful },
   } = useForm<LoginForm>({
     mode: "onSubmit",
   });
   const onValid = (data: LoginForm) => {
-    console.log("im vaild !");
+    console.log("hihihi");
+  };
+  const onInvalid = (err: any) => {
+    console.log(err);
   };
 
   return (
-    <form onSubmit={handleSubmit(onValid)}>
+    <form onSubmit={handleSubmit(onValid, onInvalid)}>
       <input
         {...register("username", {
           required: "Username is required",
@@ -50,6 +53,7 @@ export default function Forms() {
         placeholder="Password"
       />
       <input type="submit" placeholder="Create Account" />
+      {isSubmitSuccessful ? "sb true" : ""}
     </form>
   );
 }
