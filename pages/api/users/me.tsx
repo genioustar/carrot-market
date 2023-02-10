@@ -17,4 +17,6 @@ async function handler(
   });
 }
 
-export default withApiSession(withHandler("GET", handler));
+export default withApiSession(
+  withHandler({ method: "GET", fn: handler, isPrivate: true }) // 3개이상의 파라미터일떄는 이렇게 객체로 전달해주는게 가독성에 좋음!
+);
