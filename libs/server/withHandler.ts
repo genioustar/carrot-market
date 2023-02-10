@@ -12,20 +12,20 @@ interface ConfigTypes {
 }
 
 // 이 /api/users/enter로 URI로 접속하는걸 차단해주는 함수.
-export default function withHandler(config: ConfigTypes) {
+export default function withHandler({ method, fn, isPrivate }: ConfigTypes) {
   return async function (
     req: NextApiRequest,
     res: NextApiResponse
   ): Promise<any> {
-    if (req.method !== config.method) {
+    if (req.method !== method) {
       res.status(405).end();
       return;
     }
-    if (config.isPrivate && !req.session.user?.id) {
+    if (isPrivate && !req.session.user?.id) {
       res.status(401).json({ ok: false, error: "Plz log in." });
     }
     try {
-      await config.fn(req, res); // api/users/enter.tsx에서 입력받은 handler라는 함수가 될 것! handler라는 함수는 /api/users/enter.tsx에 있음!
+      await fn(req, res); // api/users/enter.tsx에서 입력받은 handler라는 함수가 될 것! handler라는 함수는 /api/users/enter.tsx에 있음!
     } catch (error) {
       console.log(error);
       return res.status(500).json({ error });
