@@ -72,3 +72,7 @@ npm install --save @sendgrid/mail
 # iron-session 설치
 
 npm i iron-session
+
+# SWR 설치
+
+npm i swr
