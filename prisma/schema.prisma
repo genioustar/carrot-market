@@ -12,14 +12,15 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  phone    String?  @unique
-  email    String?  @unique
+  id       Int       @id @default(autoincrement())
+  phone    String?   @unique
+  email    String?   @unique
   name     String
   avatar   String?
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  createAt DateTime  @default(now())
+  updateAt DateTime  @updatedAt
   tokens   Token[]
+  products Product[]
 }
 
 model Token {
@@ -29,6 +30,20 @@ model Token {
   userId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  image       String
+  name        String
+  price       Int
+  description String   @db.MediumText // string으로 하면 varchar(191)만 쓸 수 있어서!
 
   @@index([userId])
 }

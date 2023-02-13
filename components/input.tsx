@@ -1,7 +1,9 @@
+import { UseFormRegisterReturn } from "react-hook-form";
 interface InputProps {
   id: string;
   label: string;
   kind?: "text" | "price" | "phone";
+  register: UseFormRegisterReturn;
   [key: string]: any; //여기에 type이나 required 같은 attr이 들어있는거!
 }
 
@@ -48,6 +50,7 @@ export default function Input({
           <input
             className="w-full appearance-none rounded-md border border-gray-300 py-2 px-2 pl-7 text-sm placeholder-gray-400 shadow-sm focus:border-yellow-500 focus:outline-none focus:ring-yellow-500"
             id={id}
+            {...register}
             {...rest}
           />
           <div className="pointer-events-none absolute right-0 flex items-center pr-3">
