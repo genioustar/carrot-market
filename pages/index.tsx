@@ -2,25 +2,33 @@ import FloatingButton from "@/components/floating-button";
 import Item from "@/components/item";
 import Layout from "@/components/layout";
 import useUser from "@/libs/client/useUser";
+import { Product } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
+import useSWR from "swr";
+
+interface ProductsResponse {
+  ok: boolean;
+  products: Product[];
+}
 
 const Home: NextPage = () => {
   const { user, isLoading } = useUser();
-  console.log(user);
+  const { data } = useSWR<ProductsResponse>("/api/products"); // useSWR이 데이터를 가져올때 어떤 타입을 가져오는지 알려주기 위해서 <>에 interface를 넣는다!
+  console.log(data);
   return (
     <Layout title="Home" hasTabBar>
       <Head>
         <title>HOME</title>
       </Head>
       <div className="flex flex-col space-y-5 divide-y">
-        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
+        {data?.products?.map((product) => (
           <Item
-            id={i}
-            key={i}
-            name="iPhone 14"
+            id={product.id}
+            key={product.id}
+            name={product.name}
             color="Space Gray"
-            price={99}
+            price={product.price}
             loved={3}
             comments={10}
           />

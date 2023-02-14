@@ -103,7 +103,7 @@ async function handler(
 }
 
 // ★★★★★fetch로 /api/users/enter로 들어오면 실행되는 함수!★★★★★
-export default withHandler({ method: "POST", handler, isPrivate: false });
+export default withHandler({ methods: ["POST"], handler, isPrivate: false });
 
 /* 위의 함수는 server/withHandler.ts에서 리턴하는 함수로 대체될것!
 export default async function (req: NextApiRequest, res: NextApiResponse) {

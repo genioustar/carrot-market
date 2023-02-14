@@ -5,15 +5,17 @@ export interface ResponseType {
   [key: string]: any;
 }
 
+type method = "GET" | "POST" | "DELETE";
+
 interface ConfigTypes {
-  method: "POST" | "GET" | "DELETE";
+  methods: method[];
   handler: (req: NextApiRequest, res: NextApiResponse) => void;
   isPrivate?: boolean;
 }
 
 // 이 /api/users/enter로 URI로 접속하는걸 차단해주는 함수.
 export default function withHandler({
-  method,
+  methods,
   handler,
   isPrivate = true,
 }: ConfigTypes) {
@@ -21,7 +23,7 @@ export default function withHandler({
     req: NextApiRequest,
     res: NextApiResponse
   ): Promise<any> {
-    if (req.method !== method) {
+    if (req.method && !methods.includes(req.method as any)) {
       res.status(405).end();
       return;
     }
