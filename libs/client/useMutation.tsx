@@ -21,11 +21,13 @@ type UseMutationResult<T> = [(data: any) => void, UseMutationState<T>]; // type�
 export default function useMutation<T = any>(
   url: string
 ): UseMutationResult<T> {
+  // useState는 UseMutationState type을 사용하고, 초기값으로 {loading:false, data: undefined, error: undefined}를 가진다.
   const [state, setState] = useState<UseMutationState<T>>({
     loading: false,
     data: undefined,
     error: undefined,
   });
+  // 이게 있는 이유는 api호출할때 headers에 저렇게 안체워주면 나중에 데이터 받을때 data.xxx 이런게 안되서 저걸 꼭해줘야 하는데 모든 api url에 붙이기 싫어서 공통모듈로 사용하는 것!
   function mutation(data: any) {
     setState((prev) => ({ ...prev, loading: true }));
     fetch(url, {

@@ -18,6 +18,7 @@ interface TokenForm {
   token: string;
 }
 
+// 여기에 ? 안붙이면 타입스크립트에서 validForm이 없으면 어떻할래?? 하는 에러가 나서 붙여줘야함!
 interface EnterForm {
   // email or phone으로 들어오는 input 값의 형태들
   email?: string;
