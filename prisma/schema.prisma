@@ -19,8 +19,10 @@ model User {
   avatar   String?
   createAt DateTime  @default(now())
   updateAt DateTime  @updatedAt
+  // User 모델와 relation이 있는 애들은 아래처럼 계속 추가해줘야함!
   tokens   Token[]
   products Product[]
+  fav      Fav[]
 }
 
 model Token {
@@ -44,6 +46,20 @@ model Product {
   name        String
   price       Int
   description String   @db.MediumText // string으로 하면 varchar(191)만 쓸 수 있어서!
+  favs        Fav[]
 
   @@index([userId])
+}
+
+// User에 의해 생성되고 이는 Product를 가리키게 되는 모델!
+model Fav {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId    Int
+  productId Int
+
+  @@index([userId, productId])
 }

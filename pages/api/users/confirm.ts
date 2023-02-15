@@ -27,7 +27,7 @@ async function handler(
       userId: foundToken.userId,
     },
   });
-  res.json({ ok: true });
+  return res.json({ ok: true });
 }
 
 export default withApiSession(
