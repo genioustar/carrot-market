@@ -1,3 +1,6 @@
+/**
+ * iron-session을 활용해서 confirm.tsx의 handler(여기서는 fn)를 통해서 session 만듬!
+ */
 import { withIronSessionApiRoute } from "iron-session/next";
 
 // declare를 쓰는건 변수, 상수, 함수, 클래스 가 어딘가에 이미 선언되어있음을 말해주는거!
