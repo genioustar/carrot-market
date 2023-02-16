@@ -29,7 +29,7 @@ const Home: NextPage = () => {
             name={product.name}
             color="Space Gray"
             price={product.price}
-            loved={3}
+            loved={product._count.favs}
             comments={10}
           />
         ))}

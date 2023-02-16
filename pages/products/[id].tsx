@@ -5,11 +5,15 @@ import { Product, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 // ProductWithUser를 Prisma의 Product를 extends 받아야 하는 이유는 js에서 Product에 user가 없기 때문!
 interface ProductWithUser extends Product {
   user: User;
+  ok: boolean;
+  product: ProductWithUser;
+  relatedProducts: Product[];
+  isLiked: boolean;
 }
 interface ItemDetailResponse {
   ok: boolean;
@@ -20,16 +24,30 @@ interface ItemDetailResponse {
 
 const ItemDetail: NextPage = () => {
   const router = useRouter();
-  console.log(router.query);
-  const { data, error } = useSWR(
+  // console.log(router.query);
+  const { mutate } = useSWRConfig(); // unbound Mutate
+  const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
+    // mutate 함수를 통해서 캐시에 있는데이터를 변경시킬 수 있다!
     router.query.id ? `/api/products/${router.query.id}` : null // router.query.id가 없을 수도(undefined) 있기 때문에
   );
   console.log("product details : ", data);
   // 아래의 Fav 관련 함수들은 backend의 요청과 상관 없이 그냥 작동하는것 즉, await 이런거 사용 X
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
   const onFavClick = () => {
-    toggleFav({}); // body가 비어있는 POST 요청이 됨!
-  };
+    if (!data) return;
+    boundMutate(
+      (prev) =>
+        // mutate를 통해서 단지 캐쉬데이터만 변경하는것!
+        prev && {
+          // prev && 붙여 줘야 에러가 안뜸! 왜냐면 prev가 없을수도 없기 때문에 타입스크립트는 타입관리하니까 붙여줘야함!
+          ...prev,
+          isLiked: !prev.isLiked,
+        },
+      false
+    );
+    // mutate("/api/users/me", (prev: any) => ({ ok: !prev.ok }), false);
+    toggleFav({}); // toggleFav({}); // body가 비어있는 POST 요청이 됨!
+  }; // 두번째 args는 실제 지금 SWR에 있는 userSWR('url') url이 key 값이다. key값이랑 데이터를 비교해서 재검증 하겠다는 true, false 면 재검증 안함
   return (
     <Layout canGoBack title="Product Details">
       <div className="px-4 py-4">

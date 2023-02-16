@@ -1,3 +1,6 @@
+/**
+ * session에 관련덴 데이터가 아닐경우 api를 호출할때 검증해주는 함수
+ */
 import { NextApiRequest, NextApiResponse } from "next";
 // response type은 여러군대에서 사용할 것으로 이곳에서 설정하고 다른곳에서 import해서 사용!
 export interface ResponseType {
