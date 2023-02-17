@@ -7,9 +7,14 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import useSWR from "swr";
 
+export interface ProductWithCount extends Product {
+  _count: {
+    favs: number;
+  };
+}
 interface ProductsResponse {
   ok: boolean;
-  products: Product[];
+  products: ProductWithCount[];
 }
 
 const Home: NextPage = () => {
