@@ -1,6 +1,8 @@
 import Button from "@/components/button";
 import Layout from "@/components/layout";
 import TextArea from "@/components/textarea";
+import useMutation from "@/libs/client/useMutation";
+import { cls } from "@/libs/client/utils";
 import { Answer, Post, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -34,15 +36,38 @@ interface PostWithUser extends Post {
 interface CoummunityPostREsponse {
   ok: boolean;
   post: PostWithUser;
+  isCuriosity: boolean;
 }
 
 const CommunityPostDetail: NextPage = () => {
   const router = useRouter();
-  const { data, error } = useSWR<CoummunityPostREsponse>(
+  const { data, mutate } = useSWR<CoummunityPostREsponse>(
     router.query.id ? `/api/posts/${router.query.id}` : null
   ); // router의 query 값이 undefined일 수 있으므로 체크해주는 로직이 들어가야함.
+  const [curiosity] = useMutation(`/api/posts/${router.query.id}/curiosity`);
+  const onCuriosityClick = () => {
+    if (!data) return;
+    mutate(
+      {
+        ...data,
+        post: {
+          ...data.post,
+          _count: {
+            ...data.post._count,
+            curiosity: data.isCuriosity
+              ? data?.post._count.curiosity - 1
+              : data.post._count.curiosity + 1,
+          },
+        },
+        isCuriosity: !data.isCuriosity,
+      },
+      false
+    );
+    curiosity({});
+  };
   console.log(data);
   useEffect(() => {
+    console.log("123123123", data);
     // data가 없으면 이전 페이지로 가게하는 것!
     if (data && !data.ok) {
       router.push("/community");
@@ -72,7 +97,13 @@ const CommunityPostDetail: NextPage = () => {
             {data?.post?.question}
           </div>
           <div className="mt-3 flex w-full space-x-5 border-t border-b-[2px] px-4 py-2.5  text-gray-700">
-            <span className="flex items-center space-x-2 text-sm">
+            <button
+              onClick={onCuriosityClick}
+              className={cls(
+                "flex items-center space-x-2 text-sm",
+                data?.isCuriosity ? "text-teal-400" : ""
+              )}
+            >
               <svg
                 className="h-4 w-4"
                 fill="none"
@@ -88,7 +119,7 @@ const CommunityPostDetail: NextPage = () => {
                 ></path>
               </svg>
               <span>궁금해요 {data?.post._count.curiosity}</span>
-            </span>
+            </button>
             <span className="flex items-center space-x-2 text-sm">
               <svg
                 className="h-4 w-4"

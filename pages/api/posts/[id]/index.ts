@@ -8,6 +8,7 @@ async function handler(
 ) {
   const {
     query: { id },
+    session: { user },
   } = req; // request에서 body에 있는 question을 question으로 받고, session에 있는 user를 user로 받기 위해서!
   const post = await client?.post.findUnique({
     where: { id: Number(id) },
@@ -42,10 +43,22 @@ async function handler(
       },
     },
   });
+  const isCuriosity = Boolean(
+    await client?.curiosity.findFirst({
+      where: {
+        postId: Number(id),
+        userId: user?.id,
+      },
+      select: {
+        id: true,
+      },
+    })
+  );
   if (!post) res.status(404).json({ ok: false, error: "Not found post" }); // 404 not found 처리
   res.json({
     ok: true,
     post,
+    isCuriosity,
   });
 }
 
