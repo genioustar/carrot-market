@@ -8,6 +8,7 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
 /**
@@ -39,12 +40,27 @@ interface CoummunityPostREsponse {
   isCuriosity: boolean;
 }
 
+/**
+ * /community/[id]로 들어와서 question에 대한 답글을 다는 것에 대한 interface
+ */
+interface AnswerForm {
+  answer: string;
+}
+
+interface NomalPostResponse {
+  ok: boolean;
+}
 const CommunityPostDetail: NextPage = () => {
   const router = useRouter();
+  const { register, handleSubmit, reset } = useForm<Answer>();
   const { data, mutate } = useSWR<CoummunityPostREsponse>(
     router.query.id ? `/api/posts/${router.query.id}` : null
   ); // router의 query 값이 undefined일 수 있으므로 체크해주는 로직이 들어가야함.
-  const [curiosity] = useMutation(`/api/posts/${router.query.id}/curiosity`);
+  const [curiosity, { loading }] = useMutation<NomalPostResponse>(
+    `/api/posts/${router.query.id}/curiosity`
+  );
+  const [sendAnswer, { data: answerData, loading: answerLoading }] =
+    useMutation<NomalPostResponse>(`/api/posts/${router.query.id}/answers`);
   const onCuriosityClick = () => {
     if (!data) return;
     mutate(
@@ -63,7 +79,10 @@ const CommunityPostDetail: NextPage = () => {
       },
       false
     );
-    curiosity({});
+    //data가 로딩중이 아닐때만 backend로 요청을 보내게 함!
+    if (!loading) {
+      curiosity({});
+    }
   };
   useEffect(() => {
     // data가 없으면 이전 페이지로 가게하는 것!
@@ -71,7 +90,17 @@ const CommunityPostDetail: NextPage = () => {
       router.push("/community");
     }
   }, [data, router]);
-
+  useEffect(() => {
+    if (answerData && answerData.ok) {
+      reset();
+      mutate(); // mutate안에 아무것도 없는 이유는 답변을 위한 reply버튼을 누르는 것으로 궁금해요 버튼과는 다르다. 따라서 mutate를 하는 궁금해요 클릭과는 상관없는 데이터가 수정됨으로 mutate안에 data를 채울수 없음!
+    }
+  }, [answerData, reset, mutate]);
+  const onValid = (form: AnswerForm) => {
+    // console.log(form);
+    if (answerLoading) return;
+    sendAnswer(form);
+  };
   return (
     <Layout canGoBack>
       <div>
@@ -151,10 +180,15 @@ const CommunityPostDetail: NextPage = () => {
             </div>
           ))}
         </div>
-        <div className="px-4">
-          <TextArea placeholder="Answer this question!" />
-          <Button text="Reply"></Button>
-        </div>
+        <form className="px-4" onSubmit={handleSubmit(onValid)}>
+          <TextArea
+            name="description"
+            placeholder="Answer this question!"
+            required
+            register={register("answer", { required: true, minLength: 10 })}
+          />
+          <Button text={answerLoading ? "Loading" : "Reply"}></Button>
+        </form>
       </div>
     </Layout>
   );
