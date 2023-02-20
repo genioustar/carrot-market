@@ -7,13 +7,15 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   const {
-    body: { question },
+    body: { question, latitude, longitude },
     session: { user },
   } = req; // request에서 body에 있는 question을 question으로 받고, session에 있는 user를 user로 받기 위해서!
   if (req.method === "POST") {
     const post = await client?.post.create({
       data: {
         question,
+        latitude,
+        longitude,
         user: {
           connect: {
             id: user?.id,
