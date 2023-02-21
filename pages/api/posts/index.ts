@@ -28,6 +28,11 @@ async function handler(
       post,
     });
   } else if (req.method === "GET") {
+    const {
+      query: { latitude = 0, longitude = 0 },
+    } = req;
+    const parsedLatitude = parseFloat(latitude.toString());
+    const parsedLongitude = parseFloat(longitude.toString());
     const posts = await client?.post.findMany({
       include: {
         // Post model에 존재하는 값이 아닌 relation model에 있는 값을 가져오려면 꼭!! 이렇게 넣어줘야 리턴값에 user정보가 옴!
@@ -43,6 +48,16 @@ async function handler(
             curiosity: true,
             answers: true,
           },
+        },
+      },
+      where: {
+        latitude: {
+          gte: parsedLatitude - 0.01,
+          lte: parsedLatitude + 0.01,
+        },
+        longitude: {
+          gte: parsedLongitude - 0.01,
+          lte: parsedLongitude + 0.01,
         },
       },
     });
