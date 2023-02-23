@@ -1,7 +1,10 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useSWR from "swr";
-
+/**
+ * User 정보를 단순 get해오는 부분!
+ * @returns
+ */
 export default function useUser() {
   const { data, error } = useSWR("/api/users/me");
   const router = useRouter();

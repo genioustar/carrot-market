@@ -57,6 +57,7 @@ export default function Enter() {
   };
   const router = useRouter();
   useEffect(() => {
+    console.log("tokenData.ok : ", tokenData?.ok);
     if (tokenData?.ok) {
       //token값을 검증하고 검증결과가 true로 나오면 기본 페이지로 이동하는부분!
       router.push("/");
