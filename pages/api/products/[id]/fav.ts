@@ -43,7 +43,7 @@ async function handler(
         },
         product: {
           connect: {
-            id: +id.toString(),
+            id: Number(id.toString()),
           },
         },
       },
