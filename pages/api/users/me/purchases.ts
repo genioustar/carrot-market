@@ -20,7 +20,16 @@ async function handler(
       userId: user?.id,
     },
     include: {
-      product: true,
+      product: {
+        // product 안에 좋아요 하트가 있는건 좋아요는 product와 연관있는 데이터이기 때문!
+        include: {
+          _count: {
+            select: {
+              favs: true,
+            },
+          },
+        },
+      },
     },
   });
   res.json({
