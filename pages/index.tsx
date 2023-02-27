@@ -12,7 +12,7 @@ export interface ProductWithCount extends Product {
     favs: number;
   };
 }
-interface ProductsResponse {
+export interface ProductsResponse {
   ok: boolean;
   products: ProductWithCount[];
 }

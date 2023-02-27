@@ -34,7 +34,7 @@ async function handler(
   });
   res.json({
     ok: true,
-    mypurchases,
+    purchases: mypurchases,
   });
 }
 

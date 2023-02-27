@@ -33,7 +33,7 @@ async function handler(
   });
   res.json({
     ok: true,
-    mysales,
+    sales: mysales,
   });
 }
 
