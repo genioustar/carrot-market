@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useSWR from "swr";
@@ -5,13 +6,23 @@ import useSWR from "swr";
  * User 정보를 단순 get해오는 부분!
  * @returns
  */
+
+interface ProfileResponse {
+  ok: boolean;
+  profile: User;
+}
+
 export default function useUser() {
-  const { data, error } = useSWR("/api/users/me");
+  const { data, error } = useSWR<ProfileResponse>("/api/users/me");
   const router = useRouter();
   console.log(data);
   useEffect(() => {
     if (data && !data.ok) {
       router.replace("/enter");
+    }
+    console.log(router.pathname);
+    if (data && data.ok && router.pathname === "/enter") {
+      router.replace("/profile");
     }
   }, [data, router]);
   /*
