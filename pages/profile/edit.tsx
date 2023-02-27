@@ -1,14 +1,20 @@
 import Button from "@/components/button";
 import Input from "@/components/input";
 import Layout from "@/components/layout";
+import useMutation from "@/libs/client/useMutation";
 import useUser from "@/libs/client/useUser";
 import type { NextPage } from "next";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
+interface EditProfileResponse {
+  ok: boolean;
+  error?: string;
+}
 interface EditProfileForm {
   email?: string;
   phone?: string;
+  name?: string;
   formErrors?: string;
 }
 
@@ -22,14 +28,24 @@ const EditProfile: NextPage = () => {
     formState: { errors },
   } = useForm<EditProfileForm>();
   useEffect(() => {
+    if (user?.name) setValue("name", user.name);
     if (user?.email) setValue("email", user.email);
     if (user?.phone) setValue("phone", user.phone);
   }, [user, setValue]);
-  const onValid = ({ email, phone }: EditProfileForm) => {
-    if (!email && !phone)
+  const [editProfile, { data, loading }] =
+    useMutation<EditProfileResponse>(`/api/users/me`);
+  useEffect(() => {
+    if (data && !data.ok && data.error) {
+      setError("formErrors", { message: data.error });
+    }
+  }, [data, setError]);
+  const onValid = ({ email, phone, name }: EditProfileForm) => {
+    if (loading) return; // 유저가 버튼을 미친듯이 누를 경우를 대비하여
+    if (!email && !phone && !name)
       setError("formErrors", {
         message: "Email or Phone Number are required.",
       });
+    editProfile({ email, phone, name });
   };
   return (
     <Layout title="프로필 수정" canGoBack>
@@ -51,14 +67,19 @@ const EditProfile: NextPage = () => {
         </div>
         <div className="space-y-1">
           <Input
+            register={register("name")}
+            label="Name"
+            id="name"
+            required={false} // Input에서 필수값으로 지정되어있으나 실제 profile정보를 수정할때 필수값은 아님으로 false설정!
+            type="text"
+          />
+          <Input
             register={register("email")}
             label="Email Addres"
             id="email"
             required={false} // Input에서 필수값으로 지정되어있으나 실제 profile정보를 수정할때 필수값은 아님으로 false설정!
             type="email"
           />
-        </div>
-        <div className="space-y-1">
           <Input
             register={register("phone")}
             label="Phone Number"
@@ -73,7 +94,7 @@ const EditProfile: NextPage = () => {
             {errors.formErrors.message}
           </span>
         ) : null}{" "}
-        <Button text="Update Profile" />
+        <Button text={loading ? "Loading..." : "Update profile"} />
       </form>
     </Layout>
   );
