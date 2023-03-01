@@ -1,17 +1,25 @@
 import FloatingButton from "@/components/floating-button";
 import Layout from "@/components/layout";
+import { Stream } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
+import useSWR from "swr";
+
+interface StreamsResponse {
+  ok: boolean;
+  streams: Stream[];
+}
 
 const Live: NextPage = () => {
+  const { data } = useSWR<StreamsResponse>(`/api/streams`);
   return (
     <Layout title="라이브" hasTabBar={true}>
       <div className="space-y-4 divide-y-2">
-        {[1, 1, 1, 1, 1, 1].map((_, i) => (
-          <Link key={i} href={`/streams/${i}`}>
+        {data?.streams?.map((stream) => (
+          <Link key={stream.id} href={`/streams/${stream.id}`}>
             <div className="px-4 pt-4">
               <div className="aspect-video w-full rounded-md bg-slate-300 shadow-sm" />
-              <h3 className="text-lg text-gray-700">Let&apos;s try potatos</h3>
+              <h3 className="text-lg text-gray-700">{stream.name}</h3>
             </div>
           </Link>
         ))}

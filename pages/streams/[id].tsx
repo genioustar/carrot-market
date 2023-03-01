@@ -1,14 +1,38 @@
 import Layout from "@/components/layout";
+import { Stream } from "@prisma/client";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import useSWR from "swr";
+
+interface StreamResponse {
+  ok: boolean;
+  stream: Stream;
+}
 
 const StreamDetail: NextPage = () => {
+  const router = useRouter();
+  console.log(router.query.id);
+  const { data } = useSWR<StreamResponse>(
+    router.query.id ? `/api/streams/${router.query.id}` : null
+  );
+  useEffect(() => {
+    // data가 없으면 이전 페이지로 가게하는 것!
+    if (data && !data.ok) {
+      router.push("/streams");
+    }
+  }, [data, router]);
   return (
     <Layout canGoBack title="라이브 방송">
       <div className="space-y-4 px-4 py-10">
         <div className="aspect-video w-full rounded-md bg-slate-300 shadow-sm" />
-        <h3 className="text-2xl font-semibold text-gray-800">
-          Let&apos;s try potatos
-        </h3>
+        <h1 className="text-3xl font-bold text-gray-900">
+          {data?.stream?.name}
+        </h1>
+        <span className="mt-3 block text-2xl text-gray-900">
+          ${data?.stream?.price}
+        </span>
+        <p className=" my-6 text-gray-700">{data?.stream?.description}</p>
         <div className="h-[50vh] space-y-2 overflow-y-scroll py-10 px-4 pb-16">
           <div className="flex items-start space-x-2">
             <div className="h-8 w-8 rounded-full bg-slate-200" />

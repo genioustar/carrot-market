@@ -3,11 +3,11 @@ import Input from "@/components/input";
 import Layout from "@/components/layout";
 import TextArea from "@/components/textarea";
 import useMutation from "@/libs/client/useMutation";
+import { Stream } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Stream } from "stream";
 
 interface CreateForm {
   name: string;
@@ -22,7 +22,7 @@ interface CreateResoponse {
 
 const Create: NextPage = () => {
   const router = useRouter();
-  const [createStream, { data, loading }] = useMutation(``);
+  const [createStream, { data, loading }] = useMutation(`/api/streams`);
   const { register, handleSubmit } = useForm<CreateForm>();
   const onValid = (form: CreateForm) => {
     if (loading) return;
@@ -43,7 +43,7 @@ const Create: NextPage = () => {
           placeholder=""
         />
         <Input
-          register={register("price", { required: true })}
+          register={register("price", { required: true, valueAsNumber: true })} // valueAsNumber 해주면 DB에 넣을때 price: +price or price : Number(price) 안해줘도 됨!
           id="price"
           label="price"
           kind="price"
