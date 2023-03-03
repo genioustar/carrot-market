@@ -1,8 +1,10 @@
 import Layout from "@/components/layout";
+import useMutation from "@/libs/client/useMutation";
 import { Stream } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
 interface StreamResponse {
@@ -10,12 +12,24 @@ interface StreamResponse {
   stream: Stream;
 }
 
+interface MessageForm {
+  message: string;
+}
+
 const StreamDetail: NextPage = () => {
   const router = useRouter();
-  console.log(router.query.id);
+  const { register, handleSubmit, reset } = useForm<MessageForm>();
   const { data } = useSWR<StreamResponse>(
     router.query.id ? `/api/streams/${router.query.id}` : null
   );
+  const [sendMessage, { loading, data: sendMessageData }] = useMutation(
+    `/api/streams/${router.query.id}/messages`
+  );
+  const onValid = (form: MessageForm) => {
+    if (loading) return;
+    reset();
+    sendMessage(form);
+  };
   useEffect(() => {
     // data가 없으면 이전 페이지로 가게하는 것!
     if (data && !data.ok) {
@@ -156,9 +170,13 @@ const StreamDetail: NextPage = () => {
           </div>
         </div>
         <div className="fixed inset-x-0 bottom-2 mx-auto w-full max-w-md">
-          <div className="relative flex items-center">
+          <form
+            onSubmit={handleSubmit(onValid)}
+            className="relative flex items-center"
+          >
             <input
               type="text"
+              {...register("message", { required: true })}
               className="forcus:outline-none w-full rounded-full border-gray-300 pr-12 shadow-sm focus:border-yellow-500 focus:ring-yellow-300"
             />
             <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
@@ -166,7 +184,7 @@ const StreamDetail: NextPage = () => {
                 &rarr;
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </Layout>
