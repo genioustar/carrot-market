@@ -20,6 +20,21 @@ async function handler(
     where: {
       id: +id?.toString(),
     },
+    include: {
+      messages: {
+        // select가 있어야되는게 userId가 필요하기 때문에!
+        select: {
+          id: true,
+          message: true,
+          user: {
+            select: {
+              avatar: true,
+              id: true,
+            },
+          },
+        },
+      },
+    },
   });
   res.json({
     ok: true,
