@@ -35,8 +35,10 @@ const StreamDetail: NextPage = () => {
   const { user } = useUser();
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm<MessageForm>();
+  // useSWR에서 configuration object(제일 끝에 {})를 추가해서 서버가 얼마 주기로 리프래쉬할 것인지를 설정할 수 있다.
   const { data, mutate } = useSWR<StreamResponse>(
-    router.query.id ? `/api/streams/${router.query.id}` : null
+    router.query.id ? `/api/streams/${router.query.id}` : null,
+    { refreshInterval: 1000 }
   );
   const [sendMessage, { loading, data: sendMessageData }] = useMutation(
     `/api/streams/${router.query.id}/messages`
@@ -44,6 +46,28 @@ const StreamDetail: NextPage = () => {
   const onValid = (form: MessageForm) => {
     if (loading) return;
     reset();
+    // serverless에서 유저가 메세지를 치면 cache에 빠르게 적용시켜서 유저가 느끼기에 실시간이라고 오해하게 만드는 mutate
+    mutate(
+      (prev) =>
+        prev &&
+        ({
+          ...prev,
+          stream: {
+            ...prev.stream,
+            messages: [
+              ...prev.stream.messages,
+              {
+                id: Date.now(),
+                message: form.message,
+                user: {
+                  ...user,
+                },
+              },
+            ],
+          },
+        } as any),
+      false
+    );
     sendMessage(form);
   };
   useEffect(() => {
@@ -51,11 +75,7 @@ const StreamDetail: NextPage = () => {
     if (data && !data.ok) {
       router.push("/streams");
     }
-    // chat치면 리프래쉬 해주는 hook
-    if (sendMessageData && sendMessageData.ok) {
-      mutate();
-    }
-  }, [data, router, sendMessageData, mutate]);
+  }, [data, router]);
   return (
     <Layout canGoBack title="라이브 방송">
       <div className="space-y-4 px-4 py-10">
