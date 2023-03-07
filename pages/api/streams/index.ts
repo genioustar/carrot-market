@@ -36,7 +36,10 @@ async function handler(
     });
   }
   if (req.method === "GET") {
-    const streams = await client?.stream.findMany();
+    const streams = await client?.stream.findMany({
+      take: 25, // 한번에 10개 가져오게 세팅!
+      skip: 25, // 다음에 가져올때 10개 띄고 가져와라라는 뜻 다음거는 20개로 해야되고 그럼!
+    });
     res.json({
       ok: true,
       streams,

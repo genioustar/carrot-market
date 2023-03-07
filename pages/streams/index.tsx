@@ -9,9 +9,8 @@ interface StreamsResponse {
   ok: boolean;
   streams: Stream[];
 }
-
 const Live: NextPage = () => {
-  const { data } = useSWR<StreamsResponse>(`/api/streams`);
+  const { data } = useSWR<StreamsResponse>(`/api/streams?page=1`);
   return (
     <Layout title="라이브" hasTabBar={true}>
       <div className="space-y-4 divide-y-2">
