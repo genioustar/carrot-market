@@ -5,7 +5,9 @@ import useUser from "@/libs/client/useUser";
 import { Product } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
 import useSWR from "swr";
+import cat from "../public/local.jpg";
 
 export interface ProductWithCount extends Product {
   _count: {
@@ -56,6 +58,7 @@ const Home: NextPage = () => {
           </svg>
         </FloatingButton>
       </div>
+      <Image src={cat} placeholder="blur" alt={""} quality={100} />
     </Layout>
   );
 };

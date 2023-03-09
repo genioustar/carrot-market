@@ -4,7 +4,7 @@ import Layout from "@/components/layout";
 import useMutation from "@/libs/client/useMutation";
 import useUser from "@/libs/client/useUser";
 import type { NextPage } from "next";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface EditProfileResponse {
@@ -15,6 +15,7 @@ interface EditProfileForm {
   email?: string;
   phone?: string;
   name?: string;
+  avatar?: FileList;
   formErrors?: string;
 }
 
@@ -25,6 +26,7 @@ const EditProfile: NextPage = () => {
     setValue,
     handleSubmit,
     setError,
+    watch,
     formState: { errors },
   } = useForm<EditProfileForm>();
   useEffect(() => {
@@ -39,7 +41,7 @@ const EditProfile: NextPage = () => {
       setError("formErrors", { message: data.error });
     }
   }, [data, setError]);
-  const onValid = ({ email, phone, name }: EditProfileForm) => {
+  const onValid = ({ email, phone, name, avatar }: EditProfileForm) => {
     if (loading) return; // 유저가 버튼을 미친듯이 누를 경우를 대비하여
     if (!email && !phone && !name)
       setError("formErrors", {
@@ -47,17 +49,33 @@ const EditProfile: NextPage = () => {
       });
     editProfile({ email, phone, name });
   };
+  const [avatarPreview, setAvatarPreview] = useState("");
+  const avatar = watch("avatar"); //form에서 img가 변하면 바로 인지가능
+  useEffect(() => {
+    if (avatar && avatar.length > 0) {
+      const file = avatar[0];
+      setAvatarPreview(URL.createObjectURL(file));
+    }
+  }, [avatar]);
   return (
     <Layout title="프로필 수정" canGoBack>
       <form onSubmit={handleSubmit(onValid)} className="space-y-5 px-4 py-10">
         <div className="flex items-center space-x-3">
-          <div className="h-14 w-14 rounded-full bg-slate-500" />
+          {avatarPreview ? (
+            <img
+              src={avatarPreview}
+              className="h-14 w-14 rounded-full bg-slate-500"
+            />
+          ) : (
+            <div className="h-14 w-14 rounded-full bg-slate-500" />
+          )}
           <label
             htmlFor="picture"
             className="cursor-pointer rounded-md border border-gray-300 py-2 px-3 text-sm font-medium shadow-sm  transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
           >
             Change
             <input
+              {...register("avatar")}
               id="picture"
               type="file"
               className="hidden"

@@ -15,12 +15,12 @@ interface ProfileResponse {
 export default function useUser() {
   const { data, error } = useSWR<ProfileResponse>("/api/users/me");
   const router = useRouter();
-  console.log(data);
+  // console.log(data);
   useEffect(() => {
     if (data && !data.ok) {
       router.replace("/enter");
     }
-    console.log(router.pathname);
+    // console.log(router.pathname);
     if (data && data.ok && router.pathname === "/enter") {
       router.replace("/profile");
     }
