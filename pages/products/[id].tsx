@@ -3,6 +3,7 @@ import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 import { Product, User } from "@prisma/client";
 import type { NextPage } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
@@ -19,7 +20,7 @@ interface ItemDetailResponse {
   ok: boolean;
   product: ProductWithUser;
   relatedProducts: Product[];
-  isLiked: Boolean;
+  isLiked: boolean;
 }
 
 const ItemDetail: NextPage = () => {
@@ -52,9 +53,22 @@ const ItemDetail: NextPage = () => {
     <Layout canGoBack title="Product Details">
       <div className="px-4 py-4">
         <div className="mb-8">
-          <div className="h-96 bg-slate-300" />
+          <div className="relative pb-[400px]">
+            <Image
+              src={`https://shop-phinf.pstatic.net/20230113_114/1673595699367PuMNL_PNG/74731534182384190_166267861.png?type=m510`}
+              className="bg-slate-300 object-cover"
+              fill
+              alt=""
+            />
+          </div>
           <div className="mt-2 flex cursor-pointer items-center space-x-3 border-t border-b py-3">
-            <div className="h-12 w-12 rounded-full bg-slate-300" />
+            <Image
+              width={48}
+              height={48}
+              src={`https://shop-phinf.pstatic.net/20230113_114/1673595699367PuMNL_PNG/74731534182384190_166267861.png?type=m510`}
+              className="h-12 w-12 rounded-full bg-slate-300"
+              alt=""
+            />
             <div>
               <p className="text-sm font-semibold text-gray-700">
                 {data?.product?.user?.name}s
