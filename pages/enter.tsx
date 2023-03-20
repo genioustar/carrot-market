@@ -3,7 +3,6 @@ import Button from "@/components/button";
 import Input from "@/components/input";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { Suspense, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -27,14 +26,14 @@ interface EnterForm {
   phone?: string;
 }
 // {/* Lazy-loading을 위한 임시 레이아웃! */} 이부분과 같은거 하는건데 old버전
-const Bs = dynamic(
-  //@ts-ignore
-  () =>
-    new Promise((resolve) =>
-      setTimeout(() => resolve(import("@/components/bs")), 10000)
-    ),
-  { ssr: false, suspense: true, loading: () => <span>loading</span> }
-);
+// const Bs = dynamic(
+//   //@ts-ignore
+//   () =>
+//     new Promise((resolve) =>
+//       setTimeout(() => resolve(import("@/components/bs")), 10000)
+//     ),
+//   { ssr: false, suspense: true, loading: () => <span>loading</span> }
+// );
 /**
  *
  * @returns handleSubmit은 유효성 검증이 통과된 데이터를 받는데 받으면 onValid함수를 호출한다.

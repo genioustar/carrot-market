@@ -1,4 +1,5 @@
 import { Head, Html, Main, NextScript } from "next/document";
+import Script from "next/script";
 
 /**
  * 페이지를 랜더링하는데 사용되는 html 및 body 태그를 업데이트할 수 있는것!
@@ -14,6 +15,10 @@ export default function Document() {
         <link
           href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap"
           rel="stylesheet"
+        />
+        <Script
+          src="https://connect.facebook.net/en_US/sdk.js"
+          onLoad={() => {}}
         />
       </Head>
       <body>

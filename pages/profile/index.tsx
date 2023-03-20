@@ -19,7 +19,7 @@ const Profile: NextPage = () => {
   const { user } = useUser();
   const { data } = useSWR<ReviewResponse>("/api/reviews");
   return (
-    <Layout title="나의 망고" hasTabBar={true}>
+    <Layout title="나의 망고" hasTabBar={true} seoTitle="My Profile">
       <div className="px-4">
         <div className="flex items-center space-x-3 py-4">
           <div className="h-16 w-16 rounded-full bg-slate-500" />

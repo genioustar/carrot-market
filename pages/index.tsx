@@ -24,7 +24,7 @@ const Home: NextPage = () => {
   const { data } = useSWR<ProductsResponse>("/api/products"); // useSWR이 데이터를 가져올때 어떤 타입을 가져오는지 알려주기 위해서 <>에 interface를 넣는다!
   console.log(data);
   return (
-    <Layout title="Home" hasTabBar>
+    <Layout title="Home" hasTabBar seoTitle="Home">
       <Head>
         <title>HOME</title>
       </Head>

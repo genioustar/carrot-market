@@ -33,7 +33,7 @@ const Create: NextPage = () => {
     if (data && data?.ok) router.push(`/streams/${data.stream.id}`);
   }, [data, router]);
   return (
-    <Layout canGoBack title="동영상 등록">
+    <Layout canGoBack title="동영상 등록" seoTitle="Make Live">
       <form onSubmit={handleSubmit(onValid)} className="space-y-5 px-4 py-10">
         <Input
           register={register("name", { required: true })}

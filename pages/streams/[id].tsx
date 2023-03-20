@@ -77,7 +77,7 @@ const StreamDetail: NextPage = () => {
     }
   }, [data, router]);
   return (
-    <Layout canGoBack title="라이브 방송">
+    <Layout canGoBack title="라이브 방송" seoTitle="Live">
       <div className="space-y-4 px-4 py-10">
         <div className="aspect-video w-full rounded-md bg-slate-300 shadow-sm" />
         <h1 className="text-3xl font-bold text-gray-900">

@@ -4,7 +4,7 @@ import type { NextPage } from "next";
 
 const ChatDetail: NextPage = () => {
   return (
-    <Layout title="Steve" canGoBack>
+    <Layout title="Steve" canGoBack seoTitle="Chatting">
       <div className="mt-2 space-y-2 px-4 pb-16">
         <Message message="Hi how much are you selling" />
         <Message reversed={true} message="I want ￦20,000" />

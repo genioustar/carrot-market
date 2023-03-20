@@ -50,7 +50,7 @@ const ItemDetail: NextPage = () => {
     toggleFav({}); // toggleFav({}); // body가 비어있는 POST 요청이 됨!
   }; // 두번째 args는 실제 지금 SWR에 있는 userSWR('url') url이 key 값이다. key값이랑 데이터를 비교해서 재검증 하겠다는 true, false 면 재검증 안함
   return (
-    <Layout canGoBack title="Product Details">
+    <Layout canGoBack title="Product Details" seoTitle="Product Details">
       <div className="px-4 py-4">
         <div className="mb-8">
           <div className="relative pb-[400px]">
