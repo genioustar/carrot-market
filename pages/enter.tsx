@@ -1,9 +1,10 @@
+import Bs from "@/components/bs";
 import Button from "@/components/button";
 import Input from "@/components/input";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface MutationResult {
@@ -135,14 +136,20 @@ export default function Enter() {
                   />
                 ) : null}
                 {method === "phone" ? (
-                  <Input
-                    register={register("phone", { required: true })}
-                    id="phone"
-                    label="Phone Number"
-                    type="phone"
-                    required
-                    kind="phone"
-                  />
+                  <>
+                    {/* Lazy-loading을 위한 임시 레이아웃! */}
+                    <Suspense fallback={<button>loading!!</button>}>
+                      <Bs />
+                    </Suspense>
+                    <Input
+                      register={register("phone", { required: true })}
+                      id="phone"
+                      label="Phone Number"
+                      type="phone"
+                      required
+                      kind="phone"
+                    />
+                  </>
                 ) : null}
               </div>
 
