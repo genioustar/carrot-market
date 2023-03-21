@@ -4,6 +4,8 @@ import Layout from "@/components/layout";
 import useMutation from "@/libs/client/useMutation";
 import useUser from "@/libs/client/useUser";
 import type { NextPage } from "next";
+import Image from "next/image";
+import router from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -40,6 +42,10 @@ const EditProfile: NextPage = () => {
     if (data && !data.ok && data.error) {
       setError("formErrors", { message: data.error });
     }
+    if (data?.ok) {
+      //profile을 잘가져오면 edit 페이지로 돌아감.
+      router.push("/profile");
+    }
   }, [data, setError]);
   const onValid = ({ email, phone, name, avatar }: EditProfileForm) => {
     if (loading) return; // 유저가 버튼을 미친듯이 누를 경우를 대비하여
@@ -62,10 +68,7 @@ const EditProfile: NextPage = () => {
       <form onSubmit={handleSubmit(onValid)} className="space-y-5 px-4 py-10">
         <div className="flex items-center space-x-3">
           {avatarPreview ? (
-            <img
-              src={avatarPreview}
-              className="h-14 w-14 rounded-full bg-slate-500"
-            />
+            <Image src={avatarPreview} width={48} height={48} alt={""} />
           ) : (
             <div className="h-14 w-14 rounded-full bg-slate-500" />
           )}
