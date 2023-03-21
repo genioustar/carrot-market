@@ -6,7 +6,7 @@ import { Product } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
 import cat from "../public/local.jpg";
 
 export interface ProductWithCount extends Product {
@@ -36,7 +36,7 @@ const Home: NextPage = () => {
             name={product.name}
             color="Space Gray"
             price={product.price}
-            loved={product._count.favs}
+            loved={product._count?.favs}
             comments={10}
           />
         ))}
@@ -63,4 +63,42 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+const Page: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
+  return (
+    <SWRConfig
+      value={{
+        // fallback을 통해서 useSWR에서 사용하는 캐쉬의 값을 초기화 시켜줌!
+        fallback: {
+          "/api/products": {
+            ok: true,
+            products,
+          },
+        },
+      }}
+    >
+      <Home />
+    </SWRConfig>
+  );
+};
+
+//SSR을 통해서 get으로 api호출시 handler와 api를 호출하는 부분이 사라짐! (but, post의 경우는 필요함!)
+export async function getServerSideProps() {
+  const products = await client?.product.findMany({
+    include: {
+      _count: {
+        // select 조건에 맞는 거 찾아서 count만 해서 값을 알려줌!
+        select: {
+          favs: true,
+        },
+      },
+    },
+  });
+  console.log(products);
+  return {
+    props: {
+      products: JSON.parse(JSON.stringify(products)),
+    },
+  };
+}
+
+export default Page;
