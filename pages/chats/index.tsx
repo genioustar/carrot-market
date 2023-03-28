@@ -7,7 +7,7 @@ const Chat: NextPage = () => {
     <Layout title="메세지" hasTabBar seoTitle="Chat List">
       <div className="divide-y">
         {[1, 1, 1, 1, 1, 1].map((_, i) => (
-          <Link key={i} href={`/chats/${i}`}>
+          <Link key={i} href={`/chats/${i}?chatToId=17`}>
             <div className="flex cursor-pointer items-center space-x-3 py-3 px-4">
               <div className="h-10 w-10 rounded-full bg-slate-300" />
               <div>

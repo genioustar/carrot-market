@@ -2,6 +2,7 @@ import FloatingButton from "@/components/floating-button";
 import Item from "@/components/item";
 import Layout from "@/components/layout";
 import useUser from "@/libs/client/useUser";
+import client from "@/libs/server/client";
 import { Product } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
@@ -83,7 +84,7 @@ const Page: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
 
 //SSR을 통해서 get으로 api호출시 handler와 api를 호출하는 부분이 사라짐! (but, post의 경우는 필요함!)
 export async function getServerSideProps() {
-  const products = await client?.product.findMany({
+  const products = await client.product.findMany({
     include: {
       _count: {
         // select 조건에 맞는 거 찾아서 count만 해서 값을 알려줌!
