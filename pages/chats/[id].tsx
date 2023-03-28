@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
-interface ChatResponse {
+export interface ChatResponse {
   ok: boolean;
   chats: Chat[];
 }
@@ -25,7 +25,7 @@ const ChatDetail: NextPage = () => {
   const { user, isLoading } = useUser();
   const router = useRouter();
   const { data: ChatData, mutate } = useSWR<ChatResponse>(
-    `/api/chats/${router.query.id}?chatToId=${router.query.id}`
+    `/api/chats/${router.query.id}?chatToId=${router.query.chatToId}`
   );
   const { register, handleSubmit, reset } = useForm<ChatForm>();
   const onValid = ({ talk }: ChatForm) => {
@@ -34,14 +34,14 @@ const ChatDetail: NextPage = () => {
     uploadChat({ talk, chatFromId: user?.id, chatToId: router.query.chatToId });
   };
   const [uploadChat, { data, loading, error }] = useMutation<ChatFormRes>(
-    `/api/chats/${router.query.id}?chatToId=${router.query.id}`
+    `/api/chats/${router.query.id}?chatToId=${router.query.chatToId}`
   );
   useEffect(() => {
     if (!data) return;
     mutate((prev) => prev && { ...prev });
   }, [data, mutate]);
   /* 이거 찍으면 서버에도 처음에 무조건 undefined 뜨는데 이유는 처음에 페이지가 랜더링 될때 해당 값이 없어서 나는 것! 제대로 렌더링 되면 화면에 값이 나오게 됨! */
-  console.log(ChatData);
+  // console.log(ChatData);
   // console.log(user);
   // console.log(router.query);
   return (

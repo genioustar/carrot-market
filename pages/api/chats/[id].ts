@@ -8,16 +8,23 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   if (req.method === "GET") {
-    console.log(req.query);
+    const talkTo = req.url?.split("chatToId=")[1];
     const chats = await client?.chat.findMany({
       where: {
-        OR: [{ chatFromId: req.session.user?.id }, { chatFromId: 17 }],
+        OR: [
+          {
+            AND: [{ chatFromId: req.session.user?.id }, { chatToId: +talkTo }],
+          },
+          {
+            AND: [{ chatFromId: +talkTo }, { chatToId: req.session.user?.id }],
+          },
+        ],
       },
       orderBy: {
         createdAt: "asc",
       },
     });
-    // console.log(chats);
+    console.log(chats);
     res.json({
       ok: true,
       chats,

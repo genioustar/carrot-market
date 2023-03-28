@@ -1,13 +1,17 @@
 import Layout from "@/components/layout";
 import type { NextPage } from "next";
 import Link from "next/link";
+import useSWR from "swr";
+import { ChatResponse } from "./[id]";
 
 const Chat: NextPage = () => {
+  const { data } = useSWR<ChatResponse>(`/api/chats`);
+  // console.log(data);
   return (
     <Layout title="메세지" hasTabBar seoTitle="Chat List">
       <div className="divide-y">
-        {[1, 1, 1, 1, 1, 1].map((_, i) => (
-          <Link key={i} href={`/chats/${i}?chatToId=17`}>
+        {data?.chats.map((chat, i) => (
+          <Link key={i} href={`/chats/${i}?chatToId=${chat.chatToId}`}>
             <div className="flex cursor-pointer items-center space-x-3 py-3 px-4">
               <div className="h-10 w-10 rounded-full bg-slate-300" />
               <div>
