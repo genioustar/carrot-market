@@ -1,3 +1,9 @@
+# 프로그램 실행
+
+pscale connect carrot-market
+npx prisma studio
+npm run dev
+
 # nextjs 13 설치 과정
 
 npx create-next-app@latest --typescript
