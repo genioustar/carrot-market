@@ -24,7 +24,7 @@ async function handler(
         createdAt: "asc",
       },
     });
-    console.log(chats);
+    // console.log(chats);
     res.json({
       ok: true,
       chats,
