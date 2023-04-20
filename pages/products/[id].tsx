@@ -18,10 +18,10 @@ interface ProductWithUser extends Product {
   isLiked: boolean;
 }
 interface ItemDetailResponse {
-  // ok: boolean;
+  ok: boolean;
   product: ProductWithUser;
   relatedProducts: Product[];
-  // isLiked: boolean;
+  isLiked: boolean;
 }
 
 const ItemDetail: NextPage<ItemDetailResponse> = ({
@@ -167,10 +167,6 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
   );
 };
 
-const Page: NextPage<ItemDetailResponse> = ({ product, relatedProducts }) => {
-  return <ItemDetail product={product} relatedProducts={relatedProducts} />;
-};
-
 export const getStaticPaths: GetStaticPaths = () => {
   return {
     paths: [],
@@ -225,4 +221,4 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   };
 };
 
-export default Page;
+export default ItemDetail;
