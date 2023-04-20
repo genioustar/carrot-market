@@ -13,10 +13,16 @@ async function handler(
       where: {
         OR: [
           {
-            AND: [{ chatFromId: req.session.user?.id }, { chatToId: +talkTo }],
+            AND: [
+              { chatFromId: req.session.user?.id },
+              { chatToId: Number(talkTo) },
+            ],
           },
           {
-            AND: [{ chatFromId: +talkTo }, { chatToId: req.session.user?.id }],
+            AND: [
+              { chatFromId: Number(talkTo) },
+              { chatToId: req.session.user?.id },
+            ],
           },
         ],
       },

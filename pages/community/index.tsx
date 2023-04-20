@@ -100,13 +100,4 @@ const Community: NextPage<{ posts: PostWithUser[] }> = ({ posts }) => {
   );
 };
 
-export async function getStaticProps() {
-  console.log("On Demand Revalidation!!!");
-  const posts = await client?.post.findMany({ include: { user: true } });
-  return {
-    props: { posts: JSON.parse(JSON.stringify(posts)) },
-    // revalidate: 20, ODR쓰면 없어도 됨
-  };
-}
-
 export default Community;

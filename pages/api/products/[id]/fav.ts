@@ -20,7 +20,7 @@ async function handler(
   const alreadyExists = await client.fav.findFirst({
     //여기서 client.fav.findUnique()를 쓰지 못하는 이유는 where 절에 unique 속성만 들어갈 수 있기 때문, Fav 테이블은 id만 유니크하기 때문에 findFirst를 사용
     where: {
-      productId: +id.toString(),
+      productId: Number(id?.toString()),
       userId: user?.id,
     },
   });
@@ -43,7 +43,7 @@ async function handler(
         },
         product: {
           connect: {
-            id: Number(id.toString()),
+            id: Number(id?.toString()),
           },
         },
       },
