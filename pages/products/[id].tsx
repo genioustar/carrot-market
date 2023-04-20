@@ -18,16 +18,15 @@ interface ProductWithUser extends Product {
   isLiked: boolean;
 }
 interface ItemDetailResponse {
-  ok: boolean;
+  // ok: boolean;
   product: ProductWithUser;
   relatedProducts: Product[];
-  isLiked: boolean;
+  // isLiked: boolean;
 }
 
 const ItemDetail: NextPage<ItemDetailResponse> = ({
   product,
   relatedProducts,
-  isLiked,
 }) => {
   const router = useRouter();
   // console.log(router.query);
@@ -36,7 +35,7 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
     // mutate 함수를 통해서 캐시에 있는데이터를 변경시킬 수 있다!
     router.query.id ? `/api/products/${router.query.id}` : null // router.query.id가 없을 수도(undefined) 있기 때문에
   );
-  // console.log("product details : ", data);
+  console.log("product details : ", data);
   // 아래의 Fav 관련 함수들은 backend의 요청과 상관 없이 그냥 작동하는것 즉, await 이런거 사용 X
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
   const onFavClick = () => {
@@ -112,12 +111,12 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
                 onClick={onFavClick}
                 className={cls(
                   "flex items-center justify-between rounded-md p-3",
-                  isLiked
+                  data?.isLiked
                     ? "text-yellow-400 hover:bg-yellow-100 hover:text-yellow-600"
                     : "text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                 )}
               >
-                {isLiked ? (
+                {data?.isLiked ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -168,6 +167,10 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
   );
 };
 
+const Page: NextPage<ItemDetailResponse> = ({ product, relatedProducts }) => {
+  return <ItemDetail product={product} relatedProducts={relatedProducts} />;
+};
+
 export const getStaticPaths: GetStaticPaths = () => {
   return {
     paths: [],
@@ -214,27 +217,12 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       },
     },
   });
-  const isLiked = false;
-  // const isLiked = Boolean(
-  //   //에러가 나는 이유는 user 를 DB에서 가져와야하는데 없음!
-  //   await client.fav.findFirst({
-  //     where: {
-  //       productId: product?.id,
-  //       userId: user?.id,
-  //     },
-  //     select: {
-  //       // 모든거 안가져오고 id 만 가져오가헤는 select 문!
-  //       id: true,
-  //     },
-  //   })
-  // );
   return {
     props: {
       product: JSON.parse(JSON.stringify(product)),
       relatedProducts: JSON.parse(JSON.stringify(relatedProducts)),
-      isLiked,
     },
   };
 };
 
-export default ItemDetail;
+export default Page;
