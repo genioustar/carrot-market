@@ -1,13 +1,12 @@
 import Layout from "@/components/layout";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
-import client from "@/libs/server/client";
 import { Product, User } from "@prisma/client";
-import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import type { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 // ProductWithUser를 Prisma의 Product를 extends 받아야 하는 이유는 js에서 Product에 user가 없기 때문!
 interface ProductWithUser extends Product {
@@ -24,19 +23,15 @@ interface ItemDetailResponse {
   isLiked: boolean;
 }
 
-const ItemDetail: NextPage<ItemDetailResponse> = ({
-  product,
-  relatedProducts,
-  isLiked,
-}) => {
+const ItemDetail: NextPage = () => {
   const router = useRouter();
   // console.log(router.query);
-  // const { mutate } = useSWRConfig(); // unbound Mutate
+  const { mutate } = useSWRConfig(); // unbound Mutate
   const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     // mutate 함수를 통해서 캐시에 있는데이터를 변경시킬 수 있다!
     router.query.id ? `/api/products/${router.query.id}` : null // router.query.id가 없을 수도(undefined) 있기 때문에
   );
-  // console.log("product details : ", data);
+  console.log("product details : ", data);
   // 아래의 Fav 관련 함수들은 backend의 요청과 상관 없이 그냥 작동하는것 즉, await 이런거 사용 X
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
   const onFavClick = () => {
@@ -54,13 +49,6 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
     // mutate("/api/users/me", (prev: any) => ({ ok: !prev.ok }), false);
     toggleFav({}); // toggleFav({}); // body가 비어있는 POST 요청이 됨!
   }; // 두번째 args는 실제 지금 SWR에 있는 userSWR('url') url이 key 값이다. key값이랑 데이터를 비교해서 재검증 하겠다는 true, false 면 재검증 안함
-  if (router.isFallback) {
-    return (
-      <Layout title="Loading..." seoTitle="Loading...">
-        <div>Loading...</div>
-      </Layout>
-    );
-  }
   return (
     <Layout canGoBack title="Product Details" seoTitle="Product Details">
       <div className="px-4 py-4">
@@ -83,10 +71,10 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
             />
             <div>
               <p className="text-sm font-semibold text-gray-700">
-                {product?.user?.name}s
+                {data?.product?.user?.name}s
               </p>
               <Link
-                href={`/users/profile/${product?.user?.id}`}
+                href={`/users/profile/${data?.product?.user?.id}`}
                 className="text-xs font-medium text-gray-500"
               >
                 View profile &rarr;
@@ -96,13 +84,13 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
           {/* TODO 데이터가 없을때 loading 하는거 넣기! 강의 11.4 댓글보고 하면될 듯! */}
           <div className="mt-5">
             <h1 className="text-3xl font-bold text-gray-900">
-              {product?.name}
+              {data?.product?.name}
             </h1>
             <p className="mt-3 text-3xl font-semibold text-gray-900">
-              ${product?.price}
+              ${data?.product?.price}
             </p>
             <p className="my-6 text-base text-gray-700">
-              {product?.description}
+              {data?.product?.description}
             </p>
             <div className="flex items-center justify-between space-x-2">
               <button className="flex-1 cursor-pointer rounded-md bg-yellow-300 py-3 font-semibold text-gray-50 shadow-lg transition-colors hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2">
@@ -112,12 +100,12 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
                 onClick={onFavClick}
                 className={cls(
                   "flex items-center justify-between rounded-md p-3",
-                  isLiked
+                  data?.isLiked
                     ? "text-yellow-400 hover:bg-yellow-100 hover:text-yellow-600"
                     : "text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                 )}
               >
-                {isLiked ? (
+                {data?.isLiked ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -150,7 +138,7 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Similar items</h2>
           <div className="mt-6 grid grid-cols-2 gap-4">
-            {relatedProducts.map((product: any) => (
+            {data?.relatedProducts.map((product: any) => (
               <Link key={product.id} href={`/products/${product.id}`}>
                 <div>
                   <div className="mb-4 h-56 w-full bg-slate-300" />
@@ -166,75 +154,6 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
       </div>
     </Layout>
   );
-};
-
-export const getStaticPaths: GetStaticPaths = () => {
-  return {
-    paths: [],
-    fallback: true,
-  };
-};
-
-export const getStaticProps: GetStaticProps = async (ctx) => {
-  console.dir(ctx);
-  if (!ctx?.params?.id) {
-    return {
-      props: {},
-    };
-  }
-
-  const product = await client.product.findUnique({
-    where: {
-      // id: +id.toString(), 이게 id가 indefined 일 수 있다고 에러남
-      id: Number(ctx?.params.id),
-    },
-    include: {
-      user: {
-        select: {
-          // user의 모든 정보가 아니라 필요한 정보만 가져오는 부분!
-          id: true,
-          name: true,
-          avatar: true,
-        },
-      },
-    },
-  });
-  const terms = product?.name.split(" ").map((word) => ({
-    name: {
-      contains: word, // product의 name이 Galuxy S23 이렇게 띄어쓰기로 되어있어서 map을통해서 Galuxy와 S23 2번 contain한 데이터를 리턴해주게 하는것!
-    },
-  }));
-  const relatedProducts = await client.product.findMany({
-    where: {
-      OR: terms,
-      AND: {
-        id: {
-          not: product?.id, // 지금 내꺼는 유사항목에서 제외하기 위한 부분!
-        },
-      },
-    },
-  });
-  const isLiked = false;
-  // const isLiked = Boolean(
-  //   //에러가 나는 이유는 user 를 DB에서 가져와야하는데 없음!
-  //   await client.fav.findFirst({
-  //     where: {
-  //       productId: product?.id,
-  //       userId: user?.id,
-  //     },
-  //     select: {
-  //       // 모든거 안가져오고 id 만 가져오가헤는 select 문!
-  //       id: true,
-  //     },
-  //   })
-  // );
-  return {
-    props: {
-      product: JSON.parse(JSON.stringify(product)),
-      relatedProducts: JSON.parse(JSON.stringify(relatedProducts)),
-      isLiked,
-    },
-  };
 };
 
 export default ItemDetail;

@@ -48,6 +48,3 @@ const Write: NextPage = () => {
 };
 
 export default Write;
-function useFormm<T>(): { register: any; handleSubmit: any } {
-  throw new Error("Function not implemented.");
-}
