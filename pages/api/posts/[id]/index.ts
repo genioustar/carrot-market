@@ -1,3 +1,4 @@
+import client from "@/libs/server/client";
 import withHandler, { ResponseType } from "@/libs/server/withHandler";
 import { withApiSession } from "@/libs/server/withSession";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -57,6 +58,7 @@ async function handler(
       },
     })
   );
+  console.log("server isCuriosity : ", isCuriosity);
   if (!post) res.status(404).json({ ok: false, error: "Not found post" }); // 404 not found 처리
   res.json({
     ok: true,
