@@ -3,19 +3,25 @@ import Layout from "@/components/layout";
 import TextArea from "@/components/textarea";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
+import client from "@/libs/server/client";
 import { Answer, Post, User } from "@prisma/client";
-import type { NextPage } from "next";
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
 
 /**
  * Answer table에 있는 user 정보의 관계를 가져오기 위해서 잇어야하는 extends 받은 AnswerWithUser interface
  */
 interface AnswerWithUser extends Answer {
   user: User;
+  _count: {
+    answers: number;
+    curiosity: number;
+  };
+  answers: AnswerWithUser[]; // community/[id].ts 에서 answer이 응답으로 단순 데이터가아닌 relataion 테이블의 데이터를 가져옴으로 interface를 생성해줘야함.
 }
 
 /**
@@ -35,6 +41,7 @@ interface PostWithUser extends Post {
  * 위에서 만든 Post를 extends 받은 PostWithUser interface 타입으로 선언한다.
  */
 interface CoummunityPostREsponse {
+  id: string; // router.query.id
   ok: boolean;
   post: PostWithUser;
   isCuriosity: boolean;
@@ -71,7 +78,7 @@ const CommunityPostDetail: NextPage = () => {
           _count: {
             ...data.post._count,
             curiosity: data.isCuriosity
-              ? data?.post._count.curiosity - 1
+              ? data.post._count.curiosity - 1
               : data.post._count.curiosity + 1,
           },
         },
@@ -187,11 +194,89 @@ const CommunityPostDetail: NextPage = () => {
             required
             register={register("answer", { required: true, minLength: 10 })}
           />
-          <Button text={answerLoading ? "Loading" : "Reply"}></Button>
+          <Button text="Reply"></Button>
         </form>
       </div>
     </Layout>
   );
 };
 
-export default CommunityPostDetail;
+const Page: NextPage<CoummunityPostREsponse> = ({ id, post, isCuriosity }) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: { [`/api/posts/${id}`]: { ok: true, post, isCuriosity } },
+      }}
+    >
+      <CommunityPostDetail />
+    </SWRConfig>
+  );
+};
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return {
+    paths: [],
+    fallback: true,
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+  console.dir(ctx);
+  const id = ctx.params?.id;
+  if (!ctx?.params?.id) {
+    return {
+      props: {},
+    };
+  }
+  const post = await client?.post.findUnique({
+    where: { id: Number(id) },
+    include: {
+      // post와 연결된 user의 id와 name을 가져오는것! true로 하면되네??
+      user: {
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+        },
+      },
+      answers: {
+        // 이렇게 answer와 연관된 테이블의 정보를 가져오려면 일일이 select 로 가져와야 된다!
+        select: {
+          answer: true,
+          id: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              avatar: true,
+            },
+          },
+        },
+        take: 10,
+        skip: 10,
+      },
+      _count: {
+        select: {
+          answers: true,
+          curiosity: true,
+        },
+      },
+    },
+  });
+  const isCuriosity = Boolean(
+    await client?.curiosity.findFirst({
+      where: {
+        postId: Number(id),
+        userId: post?.id,
+      },
+      select: {
+        id: true,
+      },
+    })
+  );
+  return {
+    props: { id, post: JSON.parse(JSON.stringify(post)), isCuriosity },
+  };
+};
+
+export default Page;

@@ -181,7 +181,6 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       props: {},
     };
   }
-
   const product = await client.product.findUnique({
     where: {
       // id: +id.toString(), 이게 id가 indefined 일 수 있다고 에러남

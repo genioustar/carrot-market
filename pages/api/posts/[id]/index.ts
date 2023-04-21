@@ -38,6 +38,7 @@ async function handler(
         skip: 10,
       },
       _count: {
+        // 아래 조건과 일치하는 레코드 수를 계산하기 위한 method!
         select: {
           answers: true,
           curiosity: true,

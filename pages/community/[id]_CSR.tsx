@@ -1,5 +1,4 @@
 import FloatingButton from "@/components/floating-button";
-import client from "@/libs/server/client";
 import { Post, User } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
@@ -23,7 +22,7 @@ const Community: NextPage<{ posts: PostWithUser[] }> = ({ posts }) => {
   //     ? `/api/posts?latitude=${latitude}&longitude=${longitude}`
   //     : null
   // );
-  console.log(posts);
+  // console.log(data);
   return (
     <Layout hasTabBar title="동네생활" seoTitle="동네생활">
       <div className="space-y-4 divide-y-[2px]">
@@ -100,14 +99,5 @@ const Community: NextPage<{ posts: PostWithUser[] }> = ({ posts }) => {
     </Layout>
   );
 };
-
-export async function getStaticProps() {
-  console.log("On Demand Revalidation!!!");
-  const posts = await client?.post.findMany({ include: { user: true } });
-  return {
-    props: { posts: JSON.parse(JSON.stringify(posts)) },
-    // revalidate: 20, ODR쓰면 없어도 됨
-  };
-}
 
 export default Community;
