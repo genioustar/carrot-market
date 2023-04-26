@@ -216,7 +216,7 @@ const Page: NextPage<CoummunityPostREsponse> = ({ id, post, isCuriosity }) => {
 export const getStaticPaths: GetStaticPaths = () => {
   return {
     paths: [],
-    fallback: true,
+    fallback: "blocking",
   };
 };
 
